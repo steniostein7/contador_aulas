@@ -89,3 +89,35 @@ function removerLinha(index, qtd) {
     let display = document.getElementById('totalDisplay');
     display.innerText = parseInt(display.innerText) - qtd;
 }
+function adicionarDiaExtra() {
+    const dataStr = document.getElementById('extraData').value;
+    const qtd = parseInt(document.getElementById('extraQtd').value);
+
+    if (!dataStr || qtd <= 0) {
+        alert("Por favor, preencha a data e a quantidade de aulas.");
+        return;
+    }
+
+    const corpo = document.getElementById('listaCorpo');
+    const index = Date.now(); // Usando timestamp como ID único para a linha
+    const dataFormatada = dataStr.split('-').reverse().join('/');
+
+    // Adiciona a nova linha na tabela
+    const novaLinha = `
+        <tr id="linha-${index}">
+            <td>${dataFormatada}</td>
+            <td><i class="fas fa-star" style="color: var(--secondary);"></i> Dia Extra</td>
+            <td>${qtd}</td>
+            <td><button class="btn-remove" onclick="removerLinha(${index}, ${qtd})"><i class="fas fa-trash"></i></button></td>
+        </tr>
+    `;
+
+    corpo.insertAdjacentHTML('beforeend', novaLinha);
+
+    // Atualiza o total
+    let display = document.getElementById('totalDisplay');
+    display.innerText = parseInt(display.innerText) + qtd;
+
+    // Limpa os campos após adicionar
+    document.getElementById('extraData').value = '';
+}
