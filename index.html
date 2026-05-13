@@ -14,8 +14,44 @@
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
         select, input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; box-sizing: border-box; }
-        .grid-aulas { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
-        .day-input { text-align: center; }
+        /* Layout responsivo para os dias da semana */
+            .grid-aulas { 
+                display: grid; 
+                 grid-template-columns: repeat(5, 1fr); /* 5 colunas iguais no desktop */
+                    gap: 8px; 
+                    margin-bottom: 25px; 
+            }
+        /* Layout responsivo para os dias da semana */
+.grid-aulas { 
+    display: grid; 
+    grid-template-columns: repeat(5, 1fr); /* 5 colunas iguais no desktop */
+    gap: 8px; 
+    margin-bottom: 25px; 
+}
+
+.day-input { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.day-input label {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+}
+
+.day-input input {
+    padding: 10px 5px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Ajuste específico para celulares pequenos */
+@media (max-width: 480px) {
+    .grid-aulas {
+        grid-template-columns: repeat(3, 1fr); /* Muda para 3 colunas para não apertar */
+    }
+}
         button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
         button:hover { background: #5a315e; transform: translateY(-2px); }
         .resultado-card { margin-top: 30px; padding: 20px; border-radius: 15px; background: #f0fdf4; border: 2px solid var(--success); display: none; }
@@ -91,8 +127,8 @@
 
     <label>Aulas por dia da semana:</label>
     <div class="grid-aulas">
-        <div class="day-input"><label>Seg</label><input type="number" id="seg" value="0" min="0"></div>
-        <div class="day-input"><label>Ter</label><input type="number" id="ter" value="0" min="0"></div>
+        <div class=""><label>Seg</label><input type="number" id="seg" value="0" min="0"></div>
+        <div class=""><label>Ter</label><input type="number" id="ter" value="0" min="0"></div>
         <div class="day-input"><label>Qua</label><input type="number" id="qua" value="0" min="0"></div>
         <div class="day-input"><label>Qui</label><input type="number" id="qui" value="0" min="0"></div>
         <div class="day-input"><label>Sex</label><input type="number" id="sex" value="0" min="0"></div>
