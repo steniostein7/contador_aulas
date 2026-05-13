@@ -16,20 +16,28 @@
         select, input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; box-sizing: border-box; }
         .grid-aulas { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
         .day-input { text-align: center; }
-        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
         button:hover { background: #5a315e; transform: translateY(-2px); }
         .resultado-card { margin-top: 30px; padding: 20px; border-radius: 15px; background: #f0fdf4; border: 2px solid var(--success); display: none; }
         .total-aulas { font-size: 2rem; font-weight: 700; color: var(--success); display: block; text-align: center; }
         table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 0.85rem; }
         th { background: #eee; padding: 10px; text-align: left; }
         td { padding: 10px; border-bottom: 1px solid #eee; }
-        .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1.1rem; }
+        .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1.1rem; width: auto; padding: 0; margin: 0; }
+        
+        /* Ajustes para impressão na tela */
+        .btn-imprimir { background: #4b5563 !important; }
+        .btn-limpar { background: #6c757d !important; }
+
         @media print {
-    body * { visibility: hidden; }
-    #resultado, #resultado * { visibility: visible; }
-    #resultado { position: absolute; left: 0; top: 0; width: 100%; }
-    .btn-remove, button, .fas, input, label { display: none !important; }
-}
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; max-width: 100%; padding: 0; }
+            h2, .form-group, .grid-aulas, button, label, .form-extra { display: none !important; }
+            .resultado-card { display: block !important; border: none; background: white; padding: 0; margin: 0; }
+            .btn-remove, .btn-imprimir { display: none !important; }
+            table { border: 1px solid #333; }
+            th, td { border: 1px solid #333; }
+        }
     </style>
 </head>
 <body>
@@ -38,9 +46,9 @@
     <h2><i class="fas fa-calculator"></i> Contador de Aulas</h2>
 
     <div class="form-group">
-    <label>Nome da Turma (Opcional):</label>
-    <input type="text" id="nomeTurma" placeholder="Ex: 6º Ano A - Manhã">
-</div>
+        <label>Nome da Turma (Opcional):</label>
+        <input type="text" id="nomeTurma" placeholder="Ex: 6º Ano A - Manhã">
+    </div>
     
     <div class="form-group">
         <label>Trimestre:</label>
@@ -61,41 +69,45 @@
     </div>
 
     <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Gerar Listagem de Aulas</button>
-    <button onclick="limparTudo()" style="margin-top: 10px; background: #6c757d;">
-    <i class="fas fa-eraser"></i> Limpar Dados e Nova Turma
-</button>
+    <button onclick="limparTudo()" class="btn-limpar"><i class="fas fa-eraser"></i> Limpar Dados</button>
 
     <div id="resultado" class="resultado-card">
-        <div id="resultado" class="resultado-card">
-    <button onclick="imprimirResultado()" style="margin-top: 20px; background: #4b5563;">
-        <i class="fas fa-print"></i> Imprimir Relatório
-    </button>
-</div>
+        <div class="print-header" style="display:none;">
+            <h2 id="printTurma"></h2>
+            <p id="printPeriodo"></p>
+        </div>
+
         <p style="text-align:center; margin:0;">Total de aulas previstas:</p>
         <span id="totalDisplay" class="total-aulas">0</span>
-        <div style="margin-top: 20px; padding: 15px; border: 1px dashed var(--primary); border-radius: 10px; background: #fff;">
-    <p style="margin: 0 0 10px 0; font-weight: 600; font-size: 0.8rem; color: var(--primary);">
-        <i class="fas fa-plus-circle"></i> Adicionar dia extra (Feriado local, etc):
-    </p>
-    <div style="display: flex; gap: 10px; align-items: flex-end;">
-        <div style="flex: 2;">
-            <label style="font-size: 0.7rem;">Data:</label>
-            <input type="date" id="extraData">
+        
+        <button onclick="imprimirResultado()" class="btn-imprimir">
+            <i class="fas fa-print"></i> Imprimir Relatório
+        </button>
+
+        <div class="form-extra" style="margin-top: 20px; padding: 15px; border: 1px dashed var(--primary); border-radius: 10px; background: #fff;">
+            <p style="margin: 0 0 10px 0; font-weight: 600; font-size: 0.8rem; color: var(--primary);">
+                <i class="fas fa-plus-circle"></i> Adicionar dia extra (Sábado local, etc):
+            </p>
+            <div style="display: flex; gap: 10px; align-items: flex-end;">
+                <div style="flex: 2;">
+                    <label style="font-size: 0.7rem;">Data:</label>
+                    <input type="date" id="extraData">
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 0.7rem;">Aulas:</label>
+                    <input type="number" id="extraQtd" value="1" min="1">
+                </div>
+                <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 10px; font-size: 0.8rem; margin:0;">Add</button>
+            </div>
         </div>
-        <div style="flex: 1;">
-            <label style="font-size: 0.7rem;">Aulas:</label>
-            <input type="number" id="extraQtd" value="1" min="1">
-        </div>
-        <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 10px; font-size: 0.8rem;">Adicionar</button>
-    </div>
-</div>
+
         <table id="tabelaAulas">
             <thead>
                 <tr>
                     <th>Data</th>
                     <th>Motivo</th>
                     <th>Aulas</th>
-                    <th></th>
+                    <th class="no-print"></th>
                 </tr>
             </thead>
             <tbody id="listaCorpo"></tbody>
