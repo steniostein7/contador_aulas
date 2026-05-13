@@ -121,3 +121,28 @@ function adicionarDiaExtra() {
     // Limpa os campos após adicionar
     document.getElementById('extraData').value = '';
 }
+
+function limparTudo() {
+    // 1. Reseta os inputs de quantidade de aulas para zero
+    const IDs = ['seg', 'ter', 'qua', 'qui', 'sex'];
+    IDs.forEach(id => document.getElementById(id).value = 0);
+
+    // 2. Reseta o seletor de trimestre para o primeiro
+    document.getElementById('trimestre').selectedIndex = 0;
+
+    // 3. Limpa o corpo da tabela
+    document.getElementById('listaCorpo').innerHTML = '';
+
+    // 4. Reseta o contador visual
+    document.getElementById('totalDisplay').innerText = '0';
+
+    // 5. Esconde o card de resultados novamente
+    document.getElementById('resultado').style.display = 'none';
+
+    // 6. Limpa os campos de data extra, se houver
+    document.getElementById('extraData').value = '';
+    document.getElementById('extraQtd').value = 1;
+
+    // Rola a página para o topo suavemente
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
