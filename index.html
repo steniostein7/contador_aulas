@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Aulas | Professor MG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #6B3B6F; --secondary: #FF8A65; --bg: #f4f7f6; --success: #2e7d32; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+        select, input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; box-sizing: border-box; }
+        .grid-aulas { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
+        .day-input { text-align: center; }
+        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #5a315e; transform: translateY(-2px); }
+        .resultado-card { margin-top: 30px; padding: 20px; border-radius: 15px; background: #f0fdf4; border: 2px solid var(--success); display: none; }
+        .total-aulas { font-size: 2rem; font-weight: 700; color: var(--success); display: block; text-align: center; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 0.85rem; }
+        th { background: #eee; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2><i class="fas fa-calculator"></i> Contador de Aulas</h2>
+    
+    <div class="form-group">
+        <label>Trimestre:</label>
+        <select id="trimestre">
+            <option value="1">1º Trimestre (04/02 a 20/05)</option>
+            <option value="2">2º Trimestre (21/05 a 09/09)</option>
+            <option value="3">3º Trimestre (10/09 a 18/12)</option>
+        </select>
+    </div>
+
+    <label>Aulas por dia da semana:</label>
+    <div class="grid-aulas">
+        <div class="day-input"><label>Seg</label><input type="number" id="seg" value="0" min="0"></div>
+        <div class="day-input"><label>Ter</label><input type="number" id="ter" value="0" min="0"></div>
+        <div class="day-input"><label>Qua</label><input type="number" id="qua" value="0" min="0"></div>
+        <div class="day-input"><label>Qui</label><input type="number" id="qui" value="0" min="0"></div>
+        <div class="day-input"><label>Sex</label><input type="number" id="sex" value="0" min="0"></div>
+    </div>
+
+    <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Gerar Listagem de Aulas</button>
+
+    <div id="resultado" class="resultado-card">
+        <p style="text-align:center; margin:0;">Total de aulas previstas:</p>
+        <span id="totalDisplay" class="total-aulas">0</span>
+        
+        <table id="tabelaAulas">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Motivo</th>
+                    <th>Aulas</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="listaCorpo"></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
