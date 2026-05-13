@@ -113,29 +113,41 @@ function limparTudo() {
 function imprimirResultado() {
     const turma = document.getElementById('nomeTurma').value || "Não informada";
     const trimestre = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
-    
-    // Abrir janela simples de impressão
-    const printWindow = window.open('', '_blank');
-    const tableHtml = document.getElementById('tabelaAulas').outerHTML;
     const total = document.getElementById('totalDisplay').innerText;
+    
+    // Pegamos apenas o corpo da tabela para não levar botões de excluir
+    const tabelaOriginal = document.getElementById('tabelaAulas').cloneNode(true);
+    tabelaOriginal.querySelectorAll('.no-print').forEach(el => el.remove());
 
+    const printWindow = window.open('', '_blank');
     printWindow.document.write(`
-        <html><head><title>Impressão</title>
-        <style>
-            body { font-family: sans-serif; padding: 20px; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #333; padding: 8px; text-align: left; }
-            .no-print { display: none; }
-            h2 { color: #6B3B6F; }
-        </style></head>
+        <html>
+        <head>
+            <title>Relatório - ${turma}</title>
+            <style>
+                body { font-family: sans-serif; padding: 10px; font-size: 10pt; color: #000; }
+                h2 { margin: 0; color: #6B3B6F; font-size: 14pt; text-align: center; }
+                .header-info { margin: 10px 0; border-bottom: 1px solid #ccc; padding-bottom: 5px; display: flex; justify-content: space-between; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                th, td { border: 1px solid #000; padding: 3px 6px; text-align: left; font-size: 9pt; }
+                th { background-color: #f2f2f2; }
+                .total { font-weight: bold; font-size: 11pt; margin-top: 10px; text-align: right; }
+                @page { margin: 1cm; }
+            </style>
+        </head>
         <body>
-            <h2>Relatório de Aulas - Professor MG</h2>
-            <p><strong>Turma:</strong> ${turma}</p>
-            <p><strong>Período:</strong> ${trimestre}</p>
-            ${tableHtml}
-            <h3>Total de Aulas: ${total}</h3>
-            <script>window.print(); window.close();</script>
-        </body></html>
+            <h2>Contagem de Aulas</h2>
+            <div class="header-info">
+                <span><strong>Turma:</strong> ${turma}</span>
+                <span><strong>Período:</strong> ${trimestre}</span>
+            </div>
+            ${tabelaOriginal.outerHTML}
+            <div class="total">Total de Aulas Previstas: ${total}</div>
+            <script>
+                setTimeout(() => { window.print(); window.close(); }, 500);
+            </script>
+        </body>
+        </html>
     `);
     printWindow.document.close();
 }
