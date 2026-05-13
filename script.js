@@ -146,3 +146,52 @@ function limparTudo() {
     // Rola a página para o topo suavemente
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+function imprimirResultado() {
+    const turma = document.getElementById('nomeTurma').value || "Não informada";
+    const trimestre = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
+    const total = document.getElementById('totalDisplay').innerText;
+    
+    // Cria uma janela de impressão organizada
+    const conteudoImpressao = document.getElementById('resultado').cloneNode(true);
+    
+    // Remove os botões de excluir e o formulário de adicionar da cópia de impressão
+    conteudoImpressao.querySelectorAll('.btn-remove, div, button').forEach(el => el.remove());
+
+    const janelaPlanilha = window.open('', '', 'width=800,height=600');
+    janelaPlanilha.document.write(`
+        <html>
+        <head>
+            <title>Relatório de Aulas - Professor MG</title>
+            <style>
+                body { font-family: sans-serif; padding: 20px; }
+                h2 { color: #6B3B6F; text-align: center; }
+                .info { margin-bottom: 20px; border-bottom: 2px solid #6B3B6F; padding-bottom: 10px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                .total { font-size: 1.2rem; font-weight: bold; margin-top: 20px; text-align: right; }
+            </style>
+        </head>
+        <body>
+            <h2>Relatório de Contagem de Aulas</h2>
+            <div class="info">
+                <p><strong>Turma:</strong> ${turma}</p>
+                <p><strong>Período:</strong> ${trimestre}</p>
+                <p><strong>Data de Emissão:</strong> ${new Date().toLocaleDateString()}</p>
+            </div>
+            ${conteudoImpressao.innerHTML}
+            <div class="total">Total de Aulas: ${total}</div>
+        </body>
+        </html>
+    `);
+    
+    janelaPlanilha.document.close();
+    janelaPlanilha.print();
+}
+
+// Atualize a função limparTudo para resetar o nome da turma também
+function limparTudo() {
+    document.getElementById('nomeTurma').value = '';
+    // ... resto do código da função anterior ...
+}
