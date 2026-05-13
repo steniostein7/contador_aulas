@@ -151,3 +151,21 @@ function imprimirResultado() {
     `);
     printWindow.document.close();
 }
+// Seleciona todos os inputs de dias da semana
+const inputsAulas = document.querySelectorAll('.day-input input');
+
+inputsAulas.forEach(input => {
+    // Quando o usuário clica/toca no campo
+    input.addEventListener('focus', function() {
+        if (this.value === "0") {
+            this.value = ""; // Limpa o zero para o professor digitar direto
+        }
+    });
+
+    // Quando o usuário sai do campo sem digitar nada
+    input.addEventListener('blur', function() {
+        if (this.value === "") {
+            this.value = "0"; // Volta para zero se ficar vazio
+        }
+    });
+});
