@@ -54,7 +54,22 @@
     <div id="resultado" class="resultado-card">
         <p style="text-align:center; margin:0;">Total de aulas previstas:</p>
         <span id="totalDisplay" class="total-aulas">0</span>
-        
+        <div style="margin-top: 20px; padding: 15px; border: 1px dashed var(--primary); border-radius: 10px; background: #fff;">
+    <p style="margin: 0 0 10px 0; font-weight: 600; font-size: 0.8rem; color: var(--primary);">
+        <i class="fas fa-plus-circle"></i> Adicionar dia extra (Feriado local, etc):
+    </p>
+    <div style="display: flex; gap: 10px; align-items: flex-end;">
+        <div style="flex: 2;">
+            <label style="font-size: 0.7rem;">Data:</label>
+            <input type="date" id="extraData">
+        </div>
+        <div style="flex: 1;">
+            <label style="font-size: 0.7rem;">Aulas:</label>
+            <input type="number" id="extraQtd" value="1" min="1">
+        </div>
+        <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 10px; font-size: 0.8rem;">Adicionar</button>
+    </div>
+</div>
         <table id="tabelaAulas">
             <thead>
                 <tr>
