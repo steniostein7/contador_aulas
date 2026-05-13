@@ -30,13 +30,43 @@
         .btn-limpar { background: #6c757d !important; }
 
         @media print {
-            body { padding: 0; background: white; }
-            .container { box-shadow: none; max-width: 100%; padding: 0; }
-            h2, .form-group, .grid-aulas, button, label, .form-extra { display: none !important; }
-            .resultado-card { display: block !important; border: none; background: white; padding: 0; margin: 0; }
-            .btn-remove, .btn-imprimir { display: none !important; }
-            table { border: 1px solid #333; }
-            th, td { border: 1px solid #333; }
+    body { 
+        padding: 0; 
+        background: white; 
+        font-size: 9pt; /* Fonte menor para impressão */
+    }
+    .container { box-shadow: none; max-width: 100%; padding: 0; margin: 0; }
+    h2, .form-group, .grid-aulas, button, label, .form-extra { display: none !important; }
+    
+    .resultado-card { 
+        display: block !important; 
+        border: none !important; 
+        background: white !important; 
+        padding: 0 !important; 
+        margin: 0 !important; 
+    }
+    
+    .btn-remove, .btn-imprimir, .no-print { display: none !important; }
+    
+    table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 10px;
+    }
+    
+    /* Células mais compactas */
+    th, td { 
+        border: 1px solid #333 !important; 
+        padding: 2px 5px !important; /* Espaçamento mínimo */
+        line-height: 1.1 !important;
+    }
+
+    /* Reduz o tamanho do contador de aulas na impressão */
+    .total-aulas { 
+        font-size: 1.2rem !important; 
+        margin-bottom: 10px !important;
+    }
+}
         }
     </style>
 </head>
