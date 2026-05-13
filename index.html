@@ -8,101 +8,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #6B3B6F; --secondary: #FF8A65; --bg: #f4f7f6; --success: #2e7d32; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
-        select, input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; box-sizing: border-box; }
-        /* Layout responsivo para os dias da semana */
-            .grid-aulas { 
-                display: grid; 
-                 grid-template-columns: repeat(5, 1fr); /* 5 colunas iguais no desktop */
-                    gap: 8px; 
-                    margin-bottom: 25px; 
-            }
-        /* Layout responsivo para os dias da semana */
-.grid-aulas { 
-    display: grid; 
-    grid-template-columns: repeat(5, 1fr); /* 5 colunas iguais no desktop */
-    gap: 8px; 
-    margin-bottom: 25px; 
-}
-
-.day-input { 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.day-input label {
-    font-size: 0.75rem;
-    margin-bottom: 4px;
-}
-
-.day-input input {
-    padding: 10px 5px;
-    text-align: center;
-    font-size: 1rem;
-}
-
-/* Ajuste específico para celulares pequenos */
-@media (max-width: 480px) {
-    .grid-aulas {
-        grid-template-columns: repeat(3, 1fr); /* Muda para 3 colunas para não apertar */
-    }
-}
-        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
-        button:hover { background: #5a315e; transform: translateY(-2px); }
-        .resultado-card { margin-top: 30px; padding: 20px; border-radius: 15px; background: #f0fdf4; border: 2px solid var(--success); display: none; }
-        .total-aulas { font-size: 2rem; font-weight: 700; color: var(--success); display: block; text-align: center; }
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 0.85rem; }
-        th { background: #eee; padding: 10px; text-align: left; }
-        td { padding: 10px; border-bottom: 1px solid #eee; }
-        .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1.1rem; width: auto; padding: 0; margin: 0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #333; margin: 0; padding: 15px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; font-size: 1.5rem; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.85rem; }
+        select, input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; box-sizing: border-box; font-size: 1rem; }
         
-        /* Ajustes para impressão na tela */
-        .btn-imprimir { background: #4b5563 !important; }
-        .btn-limpar { background: #6c757d !important; }
+        /* Ajuste do Grid Responsivo */
+        .grid-aulas { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 8px; 
+            margin-bottom: 20px; 
+        }
+        .day-input { display: flex; flex-direction: column; align-items: center; }
+        .day-input label { font-size: 0.7rem; margin-bottom: 4px; color: #666; }
+        .day-input input { text-align: center; padding: 10px 2px; }
+
+        /* No celular, quebra em 3 colunas para não amontoar */
+        @media (max-width: 480px) {
+            .grid-aulas { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .container { padding: 15px; }
+        }
+
+        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 10px; font-size: 1rem; }
+        .btn-limpar { background: #6c757d; }
+        .btn-imprimir { background: #4b5563; margin-top: 15px; }
+        
+        .resultado-card { margin-top: 25px; padding: 15px; border-radius: 15px; background: #f0fdf4; border: 2px solid var(--success); display: none; }
+        .total-aulas { font-size: 2.2rem; font-weight: 700; color: var(--success); display: block; text-align: center; margin: 10px 0; }
+        
+        table { width: 100%; margin-top: 15px; border-collapse: collapse; font-size: 0.8rem; }
+        th { background: #eee; padding: 8px; text-align: left; }
+        td { padding: 8px; border-bottom: 1px solid #eee; }
+        .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1rem; width: auto; }
+
+        .form-extra { margin-top: 15px; padding: 10px; border: 1px dashed var(--primary); border-radius: 10px; background: #fff; }
 
         @media print {
-    body { 
-        padding: 0; 
-        background: white; 
-        font-size: 9pt; /* Fonte menor para impressão */
-    }
-    .container { box-shadow: none; max-width: 100%; padding: 0; margin: 0; }
-    h2, .form-group, .grid-aulas, button, label, .form-extra { display: none !important; }
-    
-    .resultado-card { 
-        display: block !important; 
-        border: none !important; 
-        background: white !important; 
-        padding: 0 !important; 
-        margin: 0 !important; 
-    }
-    
-    .btn-remove, .btn-imprimir, .no-print { display: none !important; }
-    
-    table { 
-        width: 100%; 
-        border-collapse: collapse; 
-        margin-top: 10px;
-    }
-    
-    /* Células mais compactas */
-    th, td { 
-        border: 1px solid #333 !important; 
-        padding: 2px 5px !important; /* Espaçamento mínimo */
-        line-height: 1.1 !important;
-    }
-
-    /* Reduz o tamanho do contador de aulas na impressão */
-    .total-aulas { 
-        font-size: 1.2rem !important; 
-        margin-bottom: 10px !important;
-    }
-}
+            h2, .form-group, .grid-aulas, button, label, .form-extra, .no-print { display: none !important; }
+            .resultado-card { display: block !important; border: none; background: white; padding: 0; }
+            table { font-size: 9pt; width: 100%; border: 1px solid #000; }
+            th, td { border: 1px solid #000; padding: 4px; }
         }
     </style>
 </head>
@@ -112,8 +60,8 @@
     <h2><i class="fas fa-calculator"></i> Contador de Aulas</h2>
 
     <div class="form-group">
-        <label>Nome da Turma (Opcional):</label>
-        <input type="text" id="nomeTurma" placeholder="Ex: 6º Ano A - Manhã">
+        <label>Nome da Turma:</label>
+        <input type="text" id="nomeTurma" placeholder="Ex: 9º Ano A">
     </div>
     
     <div class="form-group">
@@ -127,43 +75,28 @@
 
     <label>Aulas por dia da semana:</label>
     <div class="grid-aulas">
-        <div class=""><label>Seg</label><input type="number" id="seg" value="0" min="0"></div>
-        <div class=""><label>Ter</label><input type="number" id="ter" value="0" min="0"></div>
-        <div class="day-input"><label>Qua</label><input type="number" id="qua" value="0" min="0"></div>
-        <div class="day-input"><label>Qui</label><input type="number" id="qui" value="0" min="0"></div>
-        <div class="day-input"><label>Sex</label><input type="number" id="sex" value="0" min="0"></div>
+        <div class="day-input"><label>Seg</label><input type="number" id="seg" value="0"></div>
+        <div class="day-input"><label>Ter</label><input type="number" id="ter" value="0"></div>
+        <div class="day-input"><label>Qua</label><input type="number" id="qua" value="0"></div>
+        <div class="day-input"><label>Qui</label><input type="number" id="qui" value="0"></div>
+        <div class="day-input"><label>Sex</label><input type="number" id="sex" value="0"></div>
     </div>
 
-    <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Gerar Listagem de Aulas</button>
-    <button onclick="limparTudo()" class="btn-limpar"><i class="fas fa-eraser"></i> Limpar Dados</button>
+    <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Gerar Listagem</button>
+    <button onclick="limparTudo()" class="btn-limpar"><i class="fas fa-eraser"></i> Limpar Tudo</button>
 
     <div id="resultado" class="resultado-card">
-        <div class="print-header" style="display:none;">
-            <h2 id="printTurma"></h2>
-            <p id="printPeriodo"></p>
-        </div>
-
-        <p style="text-align:center; margin:0;">Total de aulas previstas:</p>
+        <p style="text-align:center; margin:0; font-size: 0.9rem;">Total de aulas previstas:</p>
         <span id="totalDisplay" class="total-aulas">0</span>
         
-        <button onclick="imprimirResultado()" class="btn-imprimir">
-            <i class="fas fa-print"></i> Imprimir Relatório
-        </button>
+        <button onclick="imprimirResultado()" class="btn-imprimir"><i class="fas fa-print"></i> Imprimir</button>
 
-        <div class="form-extra" style="margin-top: 20px; padding: 15px; border: 1px dashed var(--primary); border-radius: 10px; background: #fff;">
-            <p style="margin: 0 0 10px 0; font-weight: 600; font-size: 0.8rem; color: var(--primary);">
-                <i class="fas fa-plus-circle"></i> Adicionar dia extra (Sábado local, etc):
-            </p>
-            <div style="display: flex; gap: 10px; align-items: flex-end;">
-                <div style="flex: 2;">
-                    <label style="font-size: 0.7rem;">Data:</label>
-                    <input type="date" id="extraData">
-                </div>
-                <div style="flex: 1;">
-                    <label style="font-size: 0.7rem;">Aulas:</label>
-                    <input type="number" id="extraQtd" value="1" min="1">
-                </div>
-                <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 10px; font-size: 0.8rem; margin:0;">Add</button>
+        <div class="form-extra no-print">
+            <p style="margin: 0 0 8px 0; font-weight: 600; font-size: 0.75rem;">+ Adicionar dia extra:</p>
+            <div style="display: flex; gap: 5px;">
+                <input type="date" id="extraData" style="flex: 2; font-size: 0.8rem;">
+                <input type="number" id="extraQtd" value="1" style="flex: 1; font-size: 0.8rem;">
+                <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 8px; margin: 0; font-size: 0.7rem;">Add</button>
             </div>
         </div>
 
