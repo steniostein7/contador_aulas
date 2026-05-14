@@ -1,14 +1,17 @@
 let calendarioExcecoes = [];
 
-// Carrega o banco de dados
+// Carrega o banco de dados e limpa espaços extras nas datas
 fetch('calendario.json')
     .then(response => response.json())
     .then(data => {
-        calendarioExcecoes = data;
-        console.log("Calendário carregado com sucesso.");
+        calendarioExcecoes = data.map(item => ({
+            ...item,
+            data: item.data.trim()
+        }));
+        console.log("Calendário oficial carregado.");
     });
 
-// Solução para o problema do "0" e do "20"
+// Solução para o problema do "0" e do "20" no telemóvel
 document.querySelectorAll('.grid-aulas input').forEach(input => {
     input.addEventListener('focus', function() {
         if (this.value === "0") this.value = "";
@@ -18,9 +21,11 @@ document.querySelectorAll('.grid-aulas input').forEach(input => {
     });
 });
 
+// Nome do dia sem erros de fuso horário
 function obterNomeDia(dataString) {
     const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-    const data = new Date(dataString + "T12:00:00");
+    const partes = dataString.split('-');
+    const data = new Date(partes[0], partes[1] - 1, partes[2]);
     return dias[data.getDay()];
 }
 
@@ -35,52 +40,53 @@ function gerarContagem() {
     };
 
     const limites = {
-        "1": { inicio: "2026-02-04", fim: "2026-05-20" },
-        "2": { inicio: "2026-05-21", fim: "2026-09-09" },
-        "3": { inicio: "2026-09-10", fim: "2026-12-18" }
+        "1": { inicio: [2026, 2, 4], fim: [2026, 5, 20] },
+        "2": { inicio: [2026, 5, 21], fim: [2026, 9, 9] },
+        "3": { inicio: [2026, 9, 10], fim: [2026, 12, 18] }
     };
 
-    const periodo = limites[trimestre];
-    let dataAtual = new Date(periodo.inicio + "T12:00:00");
-    const dataFim = new Date(periodo.fim + "T12:00:00");
+    const limite = limites[trimestre];
+    let d = new Date(limite.inicio[0], limite.inicio[1] - 1, limite.inicio[2]);
+    const fim = new Date(limite.fim[0], limite.fim[1] - 1, limite.fim[2]);
+    
     let listagem = [];
 
-    while (dataAtual <= dataFim) {
-        // Formata data de forma ultra-segura para bater com o JSON
-        const dataStr = dataAtual.toISOString().split('T')[0];
+    while (d <= fim) {
+        // Formata a data como YYYY-MM-DD manualmente para garantir precisão
+        const dataStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         
-        const diaSemanaIndex = dataAtual.getDay();
-        // Procura se a data atual consta no JSON (usando trim para evitar espaços invisíveis)
-        const excecao = calendarioExcecoes.find(e => e.data.trim() === dataStr);
+        const diaSemanaIndex = d.getDay();
+        const excecao = calendarioExcecoes.find(e => e.data === dataStr);
 
-        let deveAdicionar = false;
+        let deveContar = false;
         let qtd = 0;
 
-        // REGRA DE OURO: Se está no JSON, a decisão é tomada aqui e para por aqui.
         if (excecao) {
+            // Se está no JSON, verificamos se é Sábado Letivo
             if (excecao.tipo === "sabado_letivo") {
                 const mapa = { "segunda-feira": 1, "terça-feira": 2, "quarta-feira": 3, "quinta-feira": 4, "sexta-feira": 5 };
                 const diaComp = mapa[excecao.compensa];
                 if (aulasPorDia[diaComp] > 0) {
-                    deveAdicionar = true;
+                    deveContar = true;
                     qtd = aulasPorDia[diaComp];
                 }
-            } 
-            // Se for recesso/feriado/DE, deveAdicionar continua false e ignora o resto
-        } 
-        // Só entra aqui se NÃO estiver no JSON
-        else if (diaSemanaIndex >= 1 && diaSemanaIndex <= 5) {
-            if (aulasPorDia[diaSemanaIndex] > 0) {
-                deveAdicionar = true;
-                qtd = aulasPorDia[diaSemanaIndex];
+            }
+            // SE FOR FERIADO OU RECESSO, O CÓDIGO NÃO FAZ NADA (deveContar continua false)
+        } else {
+            // Se NÃO está no JSON, verificamos se é dia útil
+            if (diaSemanaIndex >= 1 && diaSemanaIndex <= 5) {
+                if (aulasPorDia[diaSemanaIndex] > 0) {
+                    deveContar = true;
+                    qtd = aulasPorDia[diaSemanaIndex];
+                }
             }
         }
 
-        if (deveAdicionar) {
+        if (deveContar) {
             listagem.push({ data: dataStr, qtd: qtd });
         }
 
-        dataAtual.setDate(dataAtual.getDate() + 1);
+        d.setDate(d.getDate() + 1);
     }
     renderizarTabela(listagem);
 }
@@ -94,7 +100,7 @@ function renderizarTabela(lista) {
         total += item.qtd;
         const dataBr = item.data.split('-').reverse().join('/');
         corpo.innerHTML += `
-            <tr id="linha-${i}">
+            <tr id="lin-${i}">
                 <td>${dataBr}</td>
                 <td>${obterNomeDia(item.data)}</td>
                 <td>${item.qtd}</td>
@@ -109,35 +115,29 @@ function renderizarTabela(lista) {
     document.getElementById('resultado').style.display = 'block';
 }
 
-function removerLinha(index, qtd) {
-    const linha = document.getElementById(`linha-${index}`);
-    if (linha) {
-        linha.remove();
-        let display = document.getElementById('totalDisplay');
-        display.innerText = parseInt(display.innerText) - qtd;
+function removerLinha(idx, q) {
+    const el = document.getElementById(`lin-${idx}`);
+    if (el) {
+        el.remove();
+        let disp = document.getElementById('totalDisplay');
+        disp.innerText = parseInt(disp.innerText) - q;
     }
 }
 
 function adicionarDiaExtra() {
-    const dataVal = document.getElementById('extraData').value;
-    const qtdVal = parseInt(document.getElementById('extraQtd').value);
-    if (!dataVal) return;
-    
+    const dt = document.getElementById('extraData').value;
+    const q = parseInt(document.getElementById('extraQtd').value);
+    if (!dt) return;
     const id = Date.now();
-    const dataBr = dataVal.split('-').reverse().join('/');
     document.getElementById('listaCorpo').innerHTML += `
-        <tr id="linha-${id}">
-            <td>${dataBr}</td>
-            <td>${obterNomeDia(dataVal)} (Extra)</td>
-            <td>${qtdVal}</td>
-            <td class="no-print">
-                <button class="btn-remove" onclick="removerLinha(${id}, ${qtdVal})">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
+        <tr id="lin-${id}">
+            <td>${dt.split('-').reverse().join('/')}</td>
+            <td>${obterNomeDia(dt)} (Extra)</td>
+            <td>${q}</td>
+            <td class="no-print"><button class="btn-remove" onclick="removerLinha(${id}, ${q})"><i class="fas fa-trash"></i></button></td>
         </tr>`;
-    let display = document.getElementById('totalDisplay');
-    display.innerText = parseInt(display.innerText) + qtdVal;
+    let disp = document.getElementById('totalDisplay');
+    disp.innerText = parseInt(disp.innerText) + q;
 }
 
 function limparTudo() { window.location.reload(); }
@@ -145,28 +145,28 @@ function limparTudo() { window.location.reload(); }
 function imprimirResultado() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const turma = document.getElementById('nomeTurma').value || "Não informada";
-    const trimestre = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
-    const total = document.getElementById('totalDisplay').innerText;
+    const t = document.getElementById('nomeTurma').value || "Turma";
+    const trim = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
+    const tot = document.getElementById('totalDisplay').innerText;
 
     doc.setFontSize(16);
-    doc.text("Relatório de Aulas Previstas", 14, 20);
+    doc.text("Contagem de Aulas", 14, 20);
     doc.setFontSize(10);
-    doc.text(`Turma: ${turma} | Período: ${trimestre} | Total: ${total} aulas`, 14, 30);
+    doc.text(`Turma: ${t} | ${trim} | Total: ${tot} aulas`, 14, 28);
 
-    const linhas = [];
+    const rows = [];
     document.querySelectorAll("#listaCorpo tr").forEach(tr => {
         const c = tr.querySelectorAll("td");
-        if (c.length > 0) linhas.push([c[0].innerText, c[1].innerText, c[2].innerText]);
+        if (c.length > 0) rows.push([c[0].innerText, c[1].innerText, c[2].innerText]);
     });
 
     doc.autoTable({
-        startY: 35,
+        startY: 32,
         head: [['Data', 'Dia da Semana', 'Aulas']],
-        body: linhas,
+        body: rows,
         theme: 'striped',
         headStyles: { fillColor: [107, 59, 111] }
     });
 
-    doc.save(`Aulas_${turma}.pdf`);
+    doc.save(`Aulas_${t}.pdf`);
 }
