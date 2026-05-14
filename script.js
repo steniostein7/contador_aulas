@@ -130,29 +130,56 @@ function limparTudo() {
 }
 
 function imprimirResultado() {
+    // Pegar dados da tela
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
     const turma = document.getElementById('nomeTurma').value || "Não informada";
     const trimestre = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
     const total = document.getElementById('totalDisplay').innerText;
-    const tabelaClone = document.getElementById('tabelaAulas').cloneNode(true);
-    tabelaClone.querySelectorAll('.no-print').forEach(el => el.remove());
 
-    const win = window.open('', '_blank');
-    win.document.write(`
-        <html><head><style>
-            body { font-family: sans-serif; padding: 20px; font-size: 10pt; }
-            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            th, td { border: 1px solid #000; padding: 4px; text-align: left; }
-            h2 { color: #6B3B6F; margin: 0; text-align: center; }
-            .header { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
-        </style></head>
-        <body>
-            <div class="header">
-                <h2>Relatório de Aulas Previstas</h2>
-                <p><strong>Turma:</strong> ${turma} | <strong>Período:</strong> ${trimestre}</p>
-            </div>
-            ${tabelaClone.outerHTML}
-            <h3 style="text-align: right;">Total: ${total} aulas</h3>
-            <script>window.print(); window.close();</script>
-        </body></html>`);
-    win.document.close();
+    // 1. Título e Cabeçalho do PDF
+    doc.setFontSize(18);
+    doc.setTextColor(107, 59, 111); // Cor --primary (#6B3B6F)
+    doc.text("Relatório de Aulas Previstas", 14, 20);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Turma: ${turma}`, 14, 30);
+    doc.text(`Período: ${trimestre}`, 14, 37);
+    doc.text(`Total de Aulas: ${total}`, 14, 44);
+    
+    // 2. Preparar os dados da tabela
+    const colunas = ["Data", "Dia da Semana", "Aulas"];
+    const linhas = [];
+    
+    // Varremos a tabela que está na tela para pegar os dados atuais
+    const linhasTabela = document.querySelectorAll("#listaCorpo tr");
+    linhasTabela.forEach(tr => {
+        const celulas = tr.querySelectorAll("td");
+        if (celulas.length > 0) {
+            linhas.push([
+                celulas[0].innerText, // Data
+                celulas[1].innerText, // Dia da Semana
+                celulas[2].innerText  // Quantidade
+            ]);
+        }
+    });
+
+    // 3. Gerar a Tabela no PDF usando o plugin autoTable
+    doc.autoTable({
+        startY: 50,
+        head: [colunas],
+        body: linhas,
+        theme: 'striped',
+        headStyles: { fillColor: [107, 59, 111] }, // Cor do cabeçalho
+        styles: { fontSize: 9, cellPadding: 2 },
+        columnStyles: {
+            2: { halign: 'center' } // Centraliza a coluna de quantidade de aulas
+        }
+    });
+
+    // 4. Salvar o arquivo
+    const nomeArquivo = `Aulas_${turma.replace(/ /g, "_")}_${trimestre.split(' ')[0]}.pdf`;
+    doc.save(nomeArquivo);
 }
