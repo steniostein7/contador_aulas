@@ -1,15 +1,25 @@
 let calendarioExcecoes = [];
 
+// Carrega o banco de dados de datas
 fetch('calendario.json')
     .then(response => response.json())
-    .then(data => { calendarioExcecoes = data; });
+    .then(data => {
+        calendarioExcecoes = data;
+        console.log("Calendário carregado com sucesso.");
+    })
+    .catch(error => console.error("Erro ao carregar o calendário:", error));
 
-// Problema do "0" e "20"
+// Lógica para limpar o "0" nos campos de entrada (Mobile)
 document.querySelectorAll('.grid-aulas input').forEach(input => {
-    input.addEventListener('focus', function() { if (this.value === "0") this.value = ""; });
-    input.addEventListener('blur', function() { if (this.value === "") this.value = "0"; });
+    input.addEventListener('focus', function() {
+        if (this.value === "0") this.value = "";
+    });
+    input.addEventListener('blur', function() {
+        if (this.value === "") this.value = "0";
+    });
 });
 
+// Converte a data no nome do dia (Segunda, Terça...)
 function obterNomeDia(dataString) {
     const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const data = new Date(dataString + "T00:00:00");
@@ -42,24 +52,30 @@ function gerarContagem() {
         const diaSemanaIndex = dataAtual.getDay();
         const excecao = calendarioExcecoes.find(e => e.data === dataStr);
 
-        // LÓGICA CORRIGIDA:
+        let pularDia = false;
+
         if (excecao) {
             if (excecao.tipo === "sabado_letivo") {
-                const mapaCompensacao = { "segunda-feira": 1, "terça-feira": 2, "quarta-feira": 3, "quinta-feira": 4, "sexta-feira": 5 };
+                const mapaCompensacao = {
+                    "segunda-feira": 1, "terça-feira": 2, "quarta-feira": 3, "quinta-feira": 4, "sexta-feira": 5
+                };
                 const diaCompensado = mapaCompensacao[excecao.compensa];
                 if (aulasPorDia[diaCompensado] > 0) {
                     listagem.push({ data: dataStr, qtd: aulasPorDia[diaCompensado] });
                 }
+                pularDia = true; // Já processou como sábado letivo
             } else if (excecao.tipo === "recesso" || excecao.tipo === "feriado" || excecao.tipo === "DE") {
-                // SE FOR EXCEÇÃO NÃO LETIVA, PULA PARA O PRÓXIMO DIA SEM CONTAR
-                dataAtual.setDate(dataAtual.getDate() + 1);
-                continue; 
+                pularDia = true; // É um dia de folga, não faz nada
             }
-        } else if (diaSemanaIndex >= 1 && diaSemanaIndex <= 5) {
+        }
+
+        // Se não for uma exceção que mandou pular e for dia de semana
+        if (!pularDia && diaSemanaIndex >= 1 && diaSemanaIndex <= 5) {
             if (aulasPorDia[diaSemanaIndex] > 0) {
                 listagem.push({ data: dataStr, qtd: aulasPorDia[diaSemanaIndex] });
             }
         }
+
         dataAtual.setDate(dataAtual.getDate() + 1);
     }
     renderizarTabela(listagem);
@@ -69,55 +85,93 @@ function renderizarTabela(lista) {
     const corpo = document.getElementById('listaCorpo');
     corpo.innerHTML = '';
     let total = 0;
+    
     lista.forEach((item, i) => {
         total += item.qtd;
         const dataBr = item.data.split('-').reverse().join('/');
-        corpo.innerHTML += `<tr id="l-${i}"><td>${dataBr}</td><td>${obterNomeDia(item.data)}</td><td>${item.qtd}</td><td class="no-print"><button class="btn-remove" onclick="removerLinha(${i},${item.qtd})"><i class="fas fa-trash"></i></button></td></tr>`;
+        const nomeDia = obterNomeDia(item.data);
+
+        corpo.innerHTML += `
+            <tr id="linha-${i}">
+                <td>${dataBr}</td>
+                <td>${nomeDia}</td>
+                <td>${item.qtd}</td>
+                <td class="no-print">
+                    <button class="btn-remove" onclick="removerLinha(${i}, ${item.qtd})" style="color:red; background:none; border:none; cursor:pointer;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>`;
     });
     document.getElementById('totalDisplay').innerText = total;
     document.getElementById('resultado').style.display = 'block';
 }
 
-function removerLinha(i, q) {
-    document.getElementById(`l-${i}`).remove();
-    let d = document.getElementById('totalDisplay');
-    d.innerText = parseInt(d.innerText) - q;
+function removerLinha(index, qtd) {
+    const linha = document.getElementById(`linha-${index}`);
+    if (linha) {
+        linha.remove();
+        let display = document.getElementById('totalDisplay');
+        display.innerText = parseInt(display.innerText) - qtd;
+    }
 }
 
 function adicionarDiaExtra() {
-    const d = document.getElementById('extraData').value;
-    const q = parseInt(document.getElementById('extraQtd').value);
-    if (!d) return;
-    const i = Date.now();
-    document.getElementById('listaCorpo').innerHTML += `<tr id="l-${i}"><td>${d.split('-').reverse().join('/')}</td><td>${obterNomeDia(d)} (Extra)</td><td>${q}</td><td class="no-print"><button class="btn-remove" onclick="removerLinha(${i},${q})"><i class="fas fa-trash"></i></button></td></tr>`;
-    let disp = document.getElementById('totalDisplay');
-    disp.innerText = parseInt(disp.innerText) + q;
+    const dataVal = document.getElementById('extraData').value;
+    const qtdVal = parseInt(document.getElementById('extraQtd').value);
+    if (!dataVal) return;
+    
+    const id = Date.now();
+    const dataBr = dataVal.split('-').reverse().join('/');
+    const nomeDia = obterNomeDia(dataVal);
+
+    document.getElementById('listaCorpo').innerHTML += `
+        <tr id="linha-${id}">
+            <td>${dataBr}</td>
+            <td>${nomeDia} (Extra)</td>
+            <td>${qtdVal}</td>
+            <td class="no-print">
+                <button class="btn-remove" onclick="removerLinha(${id}, ${qtdVal})" style="color:red; background:none; border:none; cursor:pointer;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>`;
+    let display = document.getElementById('totalDisplay');
+    display.innerText = parseInt(display.innerText) + qtdVal;
 }
 
-function limparTudo() { window.location.reload(); }
+function limparTudo() {
+    window.location.reload();
+}
 
-// FUNÇÃO DE PDF PARA CELULAR
 function imprimirResultado() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const turma = document.getElementById('nomeTurma').value || "Não informada";
+    
+    const turma = document.getElementById('nomeTurma').value || "Nao informada";
     const trimestre = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
     const total = document.getElementById('totalDisplay').innerText;
 
     doc.setFontSize(16);
-    doc.text("Relatório de Aulas Previstas", 14, 20);
+    doc.text("Relatorio de Aulas Previstas", 14, 20);
+    
     doc.setFontSize(10);
-    doc.text(`Turma: ${turma} | Período: ${trimestre} | Total: ${total} aulas`, 14, 30);
+    doc.text(`Turma: ${turma} | Periodo: ${trimestre}`, 14, 30);
+    doc.text(`Total de Aulas: ${total}`, 14, 37);
 
+    const colunas = ["Data", "Dia da Semana", "Aulas"];
     const linhas = [];
+    
     document.querySelectorAll("#listaCorpo tr").forEach(tr => {
-        const c = tr.querySelectorAll("td");
-        linhas.push([c[0].innerText, c[1].innerText, c[2].innerText]);
+        const celulas = tr.querySelectorAll("td");
+        if (celulas.length > 0) {
+            linhas.push([celulas[0].innerText, celulas[1].innerText, celulas[2].innerText]);
+        }
     });
 
     doc.autoTable({
-        startY: 35,
-        head: [['Data', 'Dia da Semana', 'Aulas']],
+        startY: 45,
+        head: [colunas],
         body: linhas,
         theme: 'striped',
         headStyles: { fillColor: [107, 59, 111] }
