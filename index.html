@@ -91,14 +91,15 @@
 
 <div class="container">
     <h2><i class="fas fa-calculator"></i> Contador de Aulas 2026 | ProfessorMG</h2>
+    <h3><i class="fas fa-calculator"></i> Informe a turma, selecione o trimestre e defina quantas aulas acontecem em cada dia da semana.</h3>
 
     <div class="form-group">
-        <label>Nome da Turma:</label>
+        <label>Turma:</label>
         <input type="text" id="nomeTurma" placeholder="Ex: 9º Ano A">
     </div>
     
     <div class="form-group">
-        <label>Trimestre:</label>
+        <label>Selecione o trimestre:</label>
         <select id="trimestre">
             <option value="1">1º Trimestre (04/02 a 20/05)</option>
             <option value="2">2º Trimestre (21/05 a 09/09)</option>
@@ -115,8 +116,8 @@
         <div class="day-input"><label>Sex</label><input type="number" id="sex" value="0"></div>
     </div>
 
-    <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Gerar Listagem</button>
-    <button onclick="limparTudo()" class="btn-limpar"><i class="fas fa-eraser"></i> Limpar Tudo</button>
+    <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Calcular aulas</button>
+    <button onclick="limparTudo()" class="btn-limpar"><i class="fas fa-eraser"></i> Limpar Formulário</button>
 
     <div id="resultado" class="resultado-card">
         <p style="text-align:center; margin:0; font-size: 0.9rem;">Total de aulas previstas:</p>
@@ -129,7 +130,7 @@
             <div style="display: flex; gap: 5px;">
                 <input type="date" id="extraData" style="flex: 2; font-size: 0.85rem; padding: 8px;">
                 <input type="number" id="extraQtd" value="1" style="flex: 1; font-size: 0.85rem; padding: 8px;">
-                <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 8px; margin: 0; font-size: 0.75rem;">Adicionar dia</button>
+                <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 8px; margin: 0; font-size: 0.75rem;">Adicionar dia extra</button>
             </div>
         </div>
 
