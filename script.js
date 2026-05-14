@@ -201,28 +201,59 @@ function limparTudo() { window.location.reload(); }
 function imprimirResultado() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const t = document.getElementById('nomeTurma').value || "Turma";
-    const trim = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
-    const tot = document.getElementById('totalDisplay').innerText;
+    
+    const turma = document.getElementById('nomeTurma').value || "Não informada";
+    const trimestre = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
+    const total = document.getElementById('totalDisplay').innerText;
 
+    // 1. Cabeçalho do PDF
     doc.setFontSize(16);
-    doc.text("Contagem de Aulas", 14, 20);
+    doc.setTextColor(107, 59, 111); // Sua cor primária
+    doc.text("Relatório de Aulas Previstas", 14, 20);
+    
     doc.setFontSize(10);
-    doc.text(`Turma: ${t} | ${trim} | Total: ${tot} aulas`, 14, 28);
+    doc.setTextColor(100);
+    doc.text(`Turma: ${turma} | Período: ${trimestre}`, 14, 28);
 
-    const rows = [];
+    // 2. Coleta de dados da tabela
+    const linhas = [];
     document.querySelectorAll("#listaCorpo tr").forEach(tr => {
         const c = tr.querySelectorAll("td");
-        if (c.length > 0) rows.push([c[0].innerText, c[1].innerText, c[2].innerText]);
+        if (c.length > 0) {
+            linhas.push([c[0].innerText, c[1].innerText, c[2].innerText]);
+        }
     });
 
+    // 3. Geração da Tabela
     doc.autoTable({
-        startY: 32,
+        startY: 35,
         head: [['Data', 'Dia da Semana', 'Aulas']],
-        body: rows,
+        body: linhas,
         theme: 'striped',
-        headStyles: { fillColor: [107, 59, 111] }
+        headStyles: { fillColor: [107, 59, 111] },
+        didDrawPage: function (data) {
+            // --- INÍCIO DO RODAPÉ ---
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            
+            // Texto do crédito
+            const rodapeTexto = "Gerado por www.professormg.com.br - Ferramentas de Apoio ao Docente";
+            
+            // Centralizar o texto no rodapé
+            const pageSize = doc.internal.pageSize;
+            const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+            const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
+            
+            doc.text(rodapeTexto, pageWidth / 2, pageHeight - 10, { align: 'center' });
+            // --- FIM DO RODAPÉ ---
+        }
     });
 
-    doc.save(`Aulas_${t}.pdf`);
+    // 4. Rodapé Final com o Total (opcional, logo após a tabela)
+    const finalY = doc.lastAutoTable.finalY;
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Total de Aulas: ${total}`, 196, finalY + 10, { align: 'right' });
+
+    doc.save(`Aulas_${turma.replace(/ /g, "_")}.pdf`);
 }
