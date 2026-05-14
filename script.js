@@ -125,19 +125,75 @@ function removerLinha(idx, q) {
 }
 
 function adicionarDiaExtra() {
-    const dt = document.getElementById('extraData').value;
-    const q = parseInt(document.getElementById('extraQtd').value);
-    if (!dt) return;
-    const id = Date.now();
-    document.getElementById('listaCorpo').innerHTML += `
-        <tr id="lin-${id}">
-            <td>${dt.split('-').reverse().join('/')}</td>
-            <td>${obterNomeDia(dt)} (Extra)</td>
-            <td>${q}</td>
-            <td class="no-print"><button class="btn-remove" onclick="removerLinha(${id}, ${q})"><i class="fas fa-trash"></i></button></td>
-        </tr>`;
-    let disp = document.getElementById('totalDisplay');
-    disp.innerText = parseInt(disp.innerText) + q;
+    const dataVal = document.getElementById('extraData').value;
+    const qtdVal = parseInt(document.getElementById('extraQtd').value);
+    
+    if (!dataVal) {
+        alert("Selecione uma data para adicionar.");
+        return;
+    }
+
+    // 1. Criamos o objeto do novo dia
+    const novoDia = {
+        data: dataVal,
+        qtd: qtdVal,
+        extra: true // Marcamos como extra para identificar na renderização
+    };
+
+    // 2. Adicionamos à listagem que já existe (precisamos que a listagem seja global)
+    // Para isso funcionar perfeitamente, vamos capturar os dados atuais da tabela
+    // Mas a forma mais limpa é interceptar a lista antes de renderizar.
+    
+    // Vamos usar uma abordagem mais simples: Pegar todos os dados da tabela, 
+    // adicionar o novo e reordenar tudo.
+    
+    let listagemAtual = [];
+    
+    // Captura o que já está na tabela
+    document.querySelectorAll("#listaCorpo tr").forEach(tr => {
+        const celulas = tr.querySelectorAll("td");
+        // Converte a data BR (DD/MM/YYYY) de volta para ISO (YYYY-MM-DD) para ordenar
+        const dataBr = celulas[0].innerText;
+        const dataIso = dataBr.split('/').reverse().join('-');
+        const nomeDia = celulas[1].innerText;
+        const qtdAulas = parseInt(celulas[2].innerText);
+        
+        listagemAtual.push({ data: dataIso, qtd: qtdAulas, desc: nomeDia });
+    });
+
+    // Adiciona o novo dia
+    listagemAtual.push({ data: novoDia.data, qtd: novoDia.qtd, desc: obterNomeDia(novoDia.data) + " (Extra)" });
+
+    // 3. Ordena a lista por data
+    listagemAtual.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+    // 4. Limpa e reconstrói a tabela ordenada
+    renderizarTabelaOrdenada(listagemAtual);
+}
+
+// Criamos essa função auxiliar para renderizar sem duplicar o "Dia da Semana"
+function renderizarTabelaOrdenada(lista) {
+    const corpo = document.getElementById('listaCorpo');
+    corpo.innerHTML = '';
+    let total = 0;
+    
+    lista.forEach((item, i) => {
+        total += item.qtd;
+        const dataBr = item.data.split('-').reverse().join('/');
+        
+        corpo.innerHTML += `
+            <tr id="lin-${i}">
+                <td>${dataBr}</td>
+                <td>${item.desc}</td>
+                <td>${item.qtd}</td>
+                <td class="no-print">
+                    <button class="btn-remove" onclick="removerLinha(${i}, ${item.qtd})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>`;
+    });
+    document.getElementById('totalDisplay').innerText = total;
 }
 
 function limparTudo() { window.location.reload(); }
