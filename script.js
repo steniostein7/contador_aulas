@@ -5,7 +5,7 @@ fetch('calendario.json')
     .then(response => response.json())
     .then(data => {
         calendarioExcecoes = data;
-        console.log("Calendário carregado.");
+        console.log("Calendário carregado com sucesso.");
     });
 
 // Solução para o problema do "0" e do "20"
@@ -20,7 +20,6 @@ document.querySelectorAll('.grid-aulas input').forEach(input => {
 
 function obterNomeDia(dataString) {
     const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-    // Adicionamos T12:00:00 para evitar erros de fuso horário no nome do dia
     const data = new Date(dataString + "T12:00:00");
     return dias[data.getDay()];
 }
@@ -47,41 +46,38 @@ function gerarContagem() {
     let listagem = [];
 
     while (dataAtual <= dataFim) {
-        // Formata a data atual para YYYY-MM-DD para comparar com o JSON
-        const ano = dataAtual.getFullYear();
-        const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
-        const dia = String(dataAtual.getDate()).padStart(2, '0');
-        const dataStr = `${ano}-${mes}-${dia}`;
+        // Formata data de forma ultra-segura para bater com o JSON
+        const dataStr = dataAtual.toISOString().split('T')[0];
         
         const diaSemanaIndex = dataAtual.getDay();
-        const excecao = calendarioExcecoes.find(e => e.data === dataStr);
+        // Procura se a data atual consta no JSON (usando trim para evitar espaços invisíveis)
+        const excecao = calendarioExcecoes.find(e => e.data.trim() === dataStr);
 
-        let deveContar = false;
-        let qtdAulas = 0;
+        let deveAdicionar = false;
+        let qtd = 0;
 
+        // REGRA DE OURO: Se está no JSON, a decisão é tomada aqui e para por aqui.
         if (excecao) {
             if (excecao.tipo === "sabado_letivo") {
                 const mapa = { "segunda-feira": 1, "terça-feira": 2, "quarta-feira": 3, "quinta-feira": 4, "sexta-feira": 5 };
                 const diaComp = mapa[excecao.compensa];
                 if (aulasPorDia[diaComp] > 0) {
-                    deveContar = true;
-                    qtdAulas = aulasPorDia[diaComp];
+                    deveAdicionar = true;
+                    qtd = aulasPorDia[diaComp];
                 }
             } 
-            // IMPORTANTE: Se for recesso, feriado ou DE, a variável deveContar continua FALSE
-            // e o código pula para o próximo dia.
-        } else {
-            // Se não está no JSON, verifica se é dia de semana e se tem aula
-            if (diaSemanaIndex >= 1 && diaSemanaIndex <= 5) {
-                if (aulasPorDia[diaSemanaIndex] > 0) {
-                    deveContar = true;
-                    qtdAulas = aulasPorDia[diaSemanaIndex];
-                }
+            // Se for recesso/feriado/DE, deveAdicionar continua false e ignora o resto
+        } 
+        // Só entra aqui se NÃO estiver no JSON
+        else if (diaSemanaIndex >= 1 && diaSemanaIndex <= 5) {
+            if (aulasPorDia[diaSemanaIndex] > 0) {
+                deveAdicionar = true;
+                qtd = aulasPorDia[diaSemanaIndex];
             }
         }
 
-        if (deveContar) {
-            listagem.push({ data: dataStr, qtd: qtdAulas });
+        if (deveAdicionar) {
+            listagem.push({ data: dataStr, qtd: qtd });
         }
 
         dataAtual.setDate(dataAtual.getDate() + 1);
@@ -149,14 +145,14 @@ function limparTudo() { window.location.reload(); }
 function imprimirResultado() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const turma = document.getElementById('nomeTurma').value || "Nao informada";
+    const turma = document.getElementById('nomeTurma').value || "Não informada";
     const trimestre = document.getElementById('trimestre').options[document.getElementById('trimestre').selectedIndex].text;
     const total = document.getElementById('totalDisplay').innerText;
 
     doc.setFontSize(16);
-    doc.text("Relatorio de Aulas Previstas", 14, 20);
+    doc.text("Relatório de Aulas Previstas", 14, 20);
     doc.setFontSize(10);
-    doc.text(`Turma: ${turma} | Periodo: ${trimestre} | Total: ${total} aulas`, 14, 30);
+    doc.text(`Turma: ${turma} | Período: ${trimestre} | Total: ${total} aulas`, 14, 30);
 
     const linhas = [];
     document.querySelectorAll("#listaCorpo tr").forEach(tr => {
