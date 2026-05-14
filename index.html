@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contador de Aulas | Professor MG</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -15,24 +18,16 @@
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.85rem; }
         select, input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; box-sizing: border-box; font-size: 1rem; }
         
-        /* Ajuste do Grid Responsivo */
-        .grid-aulas { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 8px; 
-            margin-bottom: 20px; 
-        }
+        .grid-aulas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
         .day-input { display: flex; flex-direction: column; align-items: center; }
         .day-input label { font-size: 0.7rem; margin-bottom: 4px; color: #666; }
         .day-input input { text-align: center; padding: 10px 2px; }
 
-        /* No celular, quebra em 3 colunas para não amontoar */
         @media (max-width: 480px) {
             .grid-aulas { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-            .container { padding: 15px; }
         }
 
-        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 10px; font-size: 1rem; }
+        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
         .btn-limpar { background: #6c757d; }
         .btn-imprimir { background: #4b5563; margin-top: 15px; }
         
@@ -42,80 +37,9 @@
         table { width: 100%; margin-top: 15px; border-collapse: collapse; font-size: 0.8rem; }
         th { background: #eee; padding: 8px; text-align: left; }
         td { padding: 8px; border-bottom: 1px solid #eee; }
-        .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1rem; width: auto; }
-
-        .form-extra { margin-top: 15px; padding: 10px; border: 1px dashed var(--primary); border-radius: 10px; background: #fff; }
-
-        @media print {
-            h2, .form-group, .grid-aulas, button, label, .form-extra, .no-print { display: none !important; }
-            .resultado-card { display: block !important; border: none; background: white; padding: 0; }
-            table { font-size: 9pt; width: 100%; border: 1px solid #000; }
-            th, td { border: 1px solid #000; padding: 4px; }
-        }
+        .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
-
-<div class="container">
-    <h2><i class="fas fa-calculator"></i> Contador de Aulas</h2>
-
-    <div class="form-group">
-        <label>Nome da Turma:</label>
-        <input type="text" id="nomeTurma" placeholder="Ex: 9º Ano A">
-    </div>
-    
-    <div class="form-group">
-        <label>Trimestre:</label>
-        <select id="trimestre">
-            <option value="1">1º Trimestre (04/02 a 20/05)</option>
-            <option value="2">2º Trimestre (21/05 a 09/09)</option>
-            <option value="3">3º Trimestre (10/09 a 18/12)</option>
-        </select>
-    </div>
-
-    <label>Aulas por dia da semana:</label>
-    <div class="grid-aulas">
-        <div class="day-input"><label>Seg</label><input type="number" id="seg" value="0"></div>
-        <div class="day-input"><label>Ter</label><input type="number" id="ter" value="0"></div>
-        <div class="day-input"><label>Qua</label><input type="number" id="qua" value="0"></div>
-        <div class="day-input"><label>Qui</label><input type="number" id="qui" value="0"></div>
-        <div class="day-input"><label>Sex</label><input type="number" id="sex" value="0"></div>
-    </div>
-
-    <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Gerar Listagem</button>
-    <button onclick="limparTudo()" class="btn-limpar"><i class="fas fa-eraser"></i> Limpar Tudo</button>
-
-    <div id="resultado" class="resultado-card">
-        <p style="text-align:center; margin:0; font-size: 0.9rem;">Total de aulas previstas:</p>
-        <span id="totalDisplay" class="total-aulas">0</span>
-        
-        <button onclick="imprimirResultado()" class="btn-imprimir"><i class="fas fa-print"></i> Imprimir</button>
-
-        <div class="form-extra no-print">
-            <p style="margin: 0 0 8px 0; font-weight: 600; font-size: 0.75rem;">+ Adicionar dia extra:</p>
-            <div style="display: flex; gap: 5px;">
-                <input type="date" id="extraData" style="flex: 2; font-size: 0.8rem;">
-                <input type="number" id="extraQtd" value="1" style="flex: 1; font-size: 0.8rem;">
-                <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 8px; margin: 0; font-size: 0.7rem;">Adicionar aula</button>
-            </div>
-        </div>
-
-        <table id="tabelaAulas">
-    <thead>
-        <tr>
-            <th>Data</th>
-            <th>Dia da Semana</th> 
-            <th>Aulas</th>
-            <th class="no-print"></th>
-        </tr>
-    </thead>
-    <tbody id="listaCorpo"></tbody>
-</table>
-    </div>
-</div>
-
-<script src="script.js"></script>
-</body>
+    </body>
 </html>
