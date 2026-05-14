@@ -8,18 +8,15 @@
     
     <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <!-- Open Graph (Redes Sociais) -->
     <meta property="og:title" content="Calculadora de Aulas Previstas - SEE/MG 2026">
     <meta property="og:description" content="Ferramenta gratuita para professores mineiros organizarem o Diário Digital e planos de curso.">
     <meta property="og:image" content="assets/img/preview-calculadora.png">
     <meta property="og:type" content="website">
     
-    <!-- Bibliotecas Essenciais para PDF no Celular -->
+    <!-- Bibliotecas Essenciais -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -28,19 +25,15 @@
         body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #333; margin: 0; padding: 15px; }
         
         .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; font-size: 1.5rem; }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 10px; font-size: 1.5rem; }
+        h4 { text-align: center; font-weight: 400; color: #666; margin-bottom: 25px; font-size: 0.9rem; line-height: 1.4; }
         
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.85rem; }
         select, input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; box-sizing: border-box; font-size: 1rem; }
         
-        /* Grid Ajustado para Mobile */
-        .grid-aulas { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 8px; 
-            margin-bottom: 20px; 
-        }
+        /* Grid Ajustado */
+        .grid-aulas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
         .day-input { display: flex; flex-direction: column; align-items: center; }
         .day-input label { font-size: 0.7rem; margin-bottom: 4px; color: #666; }
         .day-input input { text-align: center; padding: 10px 2px; }
@@ -55,6 +48,7 @@
         
         .btn-limpar { background: #6c757d; }
         .btn-imprimir { background: #4b5563; margin-top: 15px; }
+        .btn-incluir { background: var(--success) !important; margin: 0 !important; padding: 10px !important; font-size: 0.85rem !important; }
         
         .resultado-card { margin-top: 25px; padding: 15px; border-radius: 15px; background: #f0fdf4; border: 2px solid var(--success); display: none; }
         .total-aulas { font-size: 2.2rem; font-weight: 700; color: var(--success); display: block; text-align: center; margin: 10px 0; }
@@ -64,42 +58,33 @@
         td { padding: 8px; border-bottom: 1px solid #eee; }
         
         .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1rem; width: auto; padding: 0; margin: 0; }
-
         .form-extra { margin-top: 15px; padding: 12px; border: 1px dashed var(--primary); border-radius: 10px; background: #fff; }
 
-        /* Impressão via Navegador (Fallback) */
         @media print {
-            h2, .form-group, .grid-aulas, button, label, .form-extra, .no-print { display: none !important; }
+            h2, h4, .form-group, .grid-aulas, button, label, .form-extra, .no-print { display: none !important; }
             .resultado-card { display: block !important; border: none; background: white; padding: 0; }
             table { font-size: 9pt; width: 100%; border: 1px solid #000; }
             th, td { border: 1px solid #000; padding: 4px; }
         }
 
-         footer { margin-top: 50px; padding: 30px 20px; font-size: 0.8rem; color: #888; text-align: center; border-top: 1px solid #eee; }
+        footer { margin-top: 50px; padding: 30px 20px; font-size: 0.8rem; color: #888; text-align: center; border-top: 1px solid #eee; }
         .social-links { margin-bottom: 15px; display: flex; justify-content: center; gap: 15px; }
         .social-btn { color: var(--primary); font-size: 1.2rem; text-decoration: none; }
-
-        @media (max-width: 600px) {
-            .menu-grid { grid-template-columns: 1fr; }
-            .banner-ded { flex-direction: column; text-align: center; }
-            .banner-content { flex-direction: column; }
-            .btn-banner { width: 80%; margin: 0 auto; }
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2><i class="fas fa-calculator"></i> Contador de Aulas 2026 | ProfessorMG</h2>
-    <h4> <i>Informe a turma, selecione o trimestre e defina quantas aulas acontecem em cada dia da semana.</i> </h4>
+    <h2><i class="fas fa-calculator"></i> Contador de Aulas 2026</h2>
+    <h4>Informe a turma, o trimestre e as aulas semanais para gerar o relatório.</h4>
 
     <div class="form-group">
-        <label>Turma:</label>
+        <label for="nomeTurma">Turma:</label>
         <input type="text" id="nomeTurma" placeholder="Ex: 9º Ano A">
     </div>
     
     <div class="form-group">
-        <label>Selecione o trimestre:</label>
+        <label for="trimestre">Selecione o trimestre:</label>
         <select id="trimestre">
             <option value="1">1º Trimestre (04/02 a 20/05)</option>
             <option value="2">2º Trimestre (21/05 a 09/09)</option>
@@ -126,12 +111,19 @@
         <button onclick="imprimirResultado()" class="btn-imprimir"><i class="fas fa-file-pdf"></i> Baixar Relatório (PDF)</button>
 
         <div class="form-extra no-print">
-            <p style="margin: 0 0 8px 0; font-weight: 800; font-size: 0.75rem; color: var(--primary);">ADICIONAR DIA EXTRA <i>(Sábados Letivos, mudanças no calendário...)</i></p>
-            <p style="margin: 0 0 8px 0; font-weight: 600; font-size: 0.75rem; color: var(--primary);">Selecione o dia e a quantidade de aulas nesse dia:</p>
-            <div style="display: flex; gap: 5px;">
-                <input type="date" id="extraData" style="flex: 2; font-size: 0.85rem; padding: 8px;">
-                <input type="number" id="extraQtd" value="1" style="flex: 1; font-size: 0.85rem; padding: 8px;">
-                <button onclick="adicionarDiaExtra()" style="flex: 1; padding: 8px; margin: 0; font-size: 0.75rem;"> + Adicionar dia extra</button>
+            <p style="margin: 0 0 8px 0; font-weight: 800; font-size: 0.75rem; color: var(--primary);">INCLUIR DIA EXTRA</p>
+            <div style="display: flex; gap: 8px; align-items: flex-end;">
+                <div style="flex: 2;">
+                    <label style="font-size: 0.7rem; margin-bottom: 4px; color: #666;">Data:</label>
+                    <input type="date" id="extraData" style="font-size: 0.85rem; padding: 8px;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 0.7rem; margin-bottom: 4px; color: #666;">Qtd:</label>
+                    <input type="number" id="extraQtd" value="1" style="font-size: 0.85rem; padding: 8px;">
+                </div>
+                <button onclick="adicionarDiaExtra()" class="btn-incluir" style="flex: 1;">
+                    <i class="fas fa-plus"></i> Incluir
+                </button>
             </div>
         </div>
 
@@ -148,15 +140,16 @@
         </table>
     </div>
 </div>
-     <footer>
-        <div class="social-links">
-            <a href="https://tiktok.com/@steniostein7" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i></a>
-            <a href="https://instagram.com/steniostein7" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
-            <a href="mailto:steniostein7@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
-        </div>
-        <p>&copy; 2026 Professor MG | Tecbox Academy</p>
-        <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--secondary);"></i> para a educação mineira.</p>
-    </footer>
+
+<footer>
+    <div class="social-links">
+        <a href="https://tiktok.com/@steniostein7" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i></a>
+        <a href="https://instagram.com/steniostein7" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="mailto:steniostein7@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
+    </div>
+    <p>&copy; 2026 Professor MG | Techbox Academy</p>
+    <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--secondary);"></i> para a educação mineira.</p>
+</footer>
 
 <script src="script.js"></script>
 </body>
