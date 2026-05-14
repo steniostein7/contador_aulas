@@ -63,6 +63,17 @@
             table { font-size: 9pt; width: 100%; border: 1px solid #000; }
             th, td { border: 1px solid #000; padding: 4px; }
         }
+
+         footer { margin-top: 50px; padding: 30px 20px; font-size: 0.8rem; color: #888; text-align: center; border-top: 1px solid #eee; }
+        .social-links { margin-bottom: 15px; display: flex; justify-content: center; gap: 15px; }
+        .social-btn { color: var(--primary); font-size: 1.2rem; text-decoration: none; }
+
+        @media (max-width: 600px) {
+            .menu-grid { grid-template-columns: 1fr; }
+            .banner-ded { flex-direction: column; text-align: center; }
+            .banner-content { flex-direction: column; }
+            .btn-banner { width: 80%; margin: 0 auto; }
+        }
     </style>
 </head>
 <body>
@@ -124,6 +135,15 @@
         </table>
     </div>
 </div>
+     <footer>
+        <div class="social-links">
+            <a href="https://tiktok.com/@steniostein7" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i></a>
+            <a href="https://instagram.com/steniostein7" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+            <a href="mailto:steniostein7@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p>&copy; 2026 Professor MG | Tecbox Academy</p>
+        <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--secondary);"></i> para a educação mineira.</p>
+    </footer>
 
 <script src="script.js"></script>
 </body>
