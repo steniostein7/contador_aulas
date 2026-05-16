@@ -22,7 +22,12 @@
         :root { --primary: #6B3B6F; --secondary: #FF8A65; --bg: #f4f7f6; --success: #2e7d32; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #333; margin: 0; padding: 15px; }
         
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        /* Limita o tamanho e centraliza tanto a calculadora quanto os elementos de fora */
+        .container, .wrapper-externo { max-width: 600px; margin: 0 auto; }
+        
+        /* Caixa branca exclusiva da Calculadora */
+        .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
         h2 { color: var(--primary); text-align: center; margin-bottom: 10px; font-size: 1.5rem; }
         h4 { text-align: center; font-weight: 400; color: #666; margin-bottom: 25px; font-size: 0.9rem; line-height: 1.4; }
         
@@ -51,12 +56,12 @@
         .btn-imprimir { background: #4b5563; margin-top: 15px; }
         .btn-incluir { background: var(--success) !important; margin: 0 !important; padding: 10px !important; font-size: 0.85rem !important; }
         
-        /* Novo Banner de Planos de Curso */
+        /* Novo Banner de Planos de Curso (Agora fora da caixa) */
         .banner-planos {
             background: #fff; border: 2px solid var(--primary); border-radius: 15px; padding: 20px;
             display: flex; align-items: center; justify-content: space-between; gap: 15px;
             text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: left;
-            margin-top: 15px; margin-bottom: 5px;
+            margin-top: 25px; margin-bottom: 25px;
         }
         .banner-planos:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(107, 59, 111, 0.12); }
         .banner-content { display: flex; align-items: center; gap: 15px; }
@@ -65,7 +70,7 @@
         .banner-info p { margin: 3px 0 0; color: #666; font-size: 0.85rem; line-height: 1.3; }
         .btn-banner { background: var(--primary); color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.75rem; text-align: center; white-space: nowrap; }
 
-        .resultado-card { margin-top: 25px; padding: 15px; border-radius: 15px; background: #f0fdf4; border: 2px solid var(--success); display: none; }
+        .resultado-card { margin-top: 25px; padding: 15px; border-radius: 15px; background: #f0fdf4; border: 2px solid var(--success); }
         .total-aulas { font-size: 2.2rem; font-weight: 700; color: var(--success); display: block; text-align: center; margin: 10px 0; }
         
         table { width: 100%; margin-top: 15px; border-collapse: collapse; font-size: 0.8rem; }
@@ -75,8 +80,8 @@
         .btn-remove { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1rem; width: auto; padding: 0; margin: 0; }
         .form-extra { margin-top: 15px; padding: 12px; border: 1px dashed var(--primary); border-radius: 10px; background: #fff; }
 
-        /* Seção PIX */
-        .pix-section { background: #fff; padding: 25px 20px; border-radius: 20px; text-align: center; margin-top: 40px; border: 2px dashed #ddd; }
+        /* Seção PIX (Agora fora da caixa) */
+        .pix-section { background: #fff; padding: 25px 20px; border-radius: 20px; text-align: center; margin-top: 25px; border: 2px dashed #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .pix-section h3 { font-size: 1.15em; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
         .pix-section p { font-size: 0.85rem; color: #555; line-height: 1.4; }
         .pix-container { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 15px; }
@@ -92,7 +97,7 @@
             th, td { border: 1px solid #000; padding: 4px; }
         }
 
-        footer { margin-top: 40px; padding: 30px 20px; font-size: 0.8rem; color: #888; text-align: center; border-top: 1px solid #eee; }
+        footer { margin-top: 50px; padding: 30px 20px; font-size: 0.8rem; color: #888; text-align: center; border-top: 1px solid #eee; }
         .social-links { margin-bottom: 15px; display: flex; justify-content: center; gap: 15px; }
         .social-btn { color: var(--primary); font-size: 1.2rem; text-decoration: none; }
     </style>
@@ -129,18 +134,7 @@
     <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Calcular aulas</button>
     <button onclick="limparTudo()" class="btn-limpar"><i class="fas fa-eraser"></i> Limpar Formulário</button>
 
-    <a href="https://planos.professormg.com.br" target="_blank" class="banner-planos no-print">
-        <div class="banner-content">
-            <div class="banner-icon"><i class="fas fa-book-open"></i></div>
-            <div class="banner-info">
-                <h5>Planos de Curso SEE/MG 2026</h5>
-                <p>Baixe os planejamentos e diretrizes do Ensino Fundamental e Médio organizados por trimestre.</p>
-            </div>
-        </div>
-        <div class="btn-banner">Baixar Planos</div>
-    </a>
-
-    <div id="resultado" class="resultado-card">
+    <div id="resultado" class="resultado-card" style="display: none;">
         <p style="text-align:center; margin:0; font-size: 0.9rem;">Total de aulas previstas:</p>
         <span id="totalDisplay" class="total-aulas">0</span>
         
@@ -175,6 +169,18 @@
             <tbody id="listaCorpo"></tbody>
         </table>
     </div>
+</div> <div class="wrapper-externo">
+    
+    <a href="https://planos.professormg.com.br" target="_blank" class="banner-planos no-print">
+        <div class="banner-content">
+            <div class="banner-icon"><i class="fas fa-book-open"></i></div>
+            <div class="banner-info">
+                <h5>Planos de Curso SEE/MG 2026</h5>
+                <p>Baixe os planejamentos e diretrizes do Ensino Fundamental e Médio organizados por trimestre.</p>
+            </div>
+        </div>
+        <div class="btn-banner">Baixar Planos</div>
+    </a>
 
     <div class="pix-section no-print">
         <div class="coffee-icon"><i class="fas fa-coffee"></i></div>
@@ -189,20 +195,19 @@
         </div>
         <p style="font-size: 0.7em; margin-top: 12px; color: #999;">Contribuição voluntária para cobrir custos de infraestrutura e hospedagem.</p>
     </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://tiktok.com/@steniostein7" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i></a>
+            <a href="https://instagram.com/steniostein7" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+            <a href="mailto:steniostein7@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p>&copy; 2026 Professor MG | Techbox Academy</p>
+        <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--secondary);"></i> para a educação mineira.</p>
+    </footer>
 </div>
 
-<footer>
-    <div class="social-links">
-        <a href="https://tiktok.com/@steniostein7" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i></a>
-        <a href="https://instagram.com/steniostein7" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
-        <a href="mailto:steniostein7@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
-    </div>
-    <p>&copy; 2026 Professor MG | Techbox Academy</p>
-    <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--secondary);"></i> para a educação mineira.</p>
-</footer>
-
 <script>
-    // Função auxiliar local para garantir o funcionamento imediato do botão copiar
     function copyPix() {
         const pixKey = document.getElementById('pixKey').innerText;
         const btn = document.getElementById('copyBtn');
