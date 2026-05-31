@@ -1,64 +1,46 @@
 # Contador de Aulas
 
-Aplicação web simples para contagem e acompanhamento de aulas, desenvolvida com **JavaScript** e **HTML**.
+Uma aplicação web simples para acompanhar a quantidade de aulas, faltas e progresso letivo de forma prática.
 
-## 📋 Sobre o projeto
+## Visão geral
 
-O **Contador de Aulas** é um projeto voltado para facilitar o controle da quantidade de aulas, permitindo uma visualização rápida e prática das informações diretamente no navegador.
+O **Contador de Aulas** ajuda a registrar e visualizar informações básicas sobre aulas ao longo de um período letivo. O projeto é construído com **HTML** e **JavaScript**, com foco em simplicidade, uso direto no navegador e facilidade de manutenção.
 
-## 🚀 Tecnologias utilizadas
+## Funcionalidades
 
-- **JavaScript**
-- **HTML**
+- Contagem de aulas realizadas
+- Acompanhamento de faltas
+- Visualização de progresso
+- Interface web leve e direta
 
-## 📁 Estrutura do projeto
+## Tecnologias
 
-Como o repositório é composto principalmente por arquivos HTML e JavaScript, a aplicação provavelmente roda de forma simples no navegador, sem necessidade de backend.
+- HTML
+- JavaScript
 
-Exemplo de estrutura esperada:
+## Como usar
 
-```text
-contador_aulas/
-├── index.html
-├── script.js
-└── README.md
-```
+1. Clone este repositório.
+2. Abra o projeto em seu editor de preferência.
+3. Execute a aplicação abrindo o arquivo principal HTML no navegador.
 
-## ▶️ Como executar
+## Estrutura do projeto
 
-1. Clone este repositório:
+- `index.html`: estrutura da interface
+- `script.js`: lógica principal da aplicação
 
-```bash
-git clone https://github.com/steniostein7/contador_aulas.git
-```
+## Publicação com GitHub Pages
 
-2. Acesse a pasta do projeto:
+Este repositório pode ser publicado com **GitHub Pages** pela aba de configurações do GitHub.
 
-```bash
-cd contador_aulas
-```
+## Contribuição
 
-3. Abra o arquivo `index.html` no navegador.
+Contribuições são bem-vindas. Se quiser melhorar o projeto:
 
-## 💡 Funcionalidades
+1. Faça um fork do repositório
+2. Crie uma branch para sua alteração
+3. Envie um pull request
 
-- Contagem de aulas
-- Interface simples e direta
-- Execução local no navegador
+## Licença
 
-## 📌 Melhorias futuras
-
-- Adicionar estilização com CSS
-- Persistência de dados no navegador
-- Melhorar a usabilidade da interface
-- Adicionar responsividade
-
-## 👤 Autor
-
-Desenvolvido por **@steniostein7**
-
-- GitHub: `steniostein7`
-
-## 📄 Licença
-
-Este projeto pode ser utilizado para fins de estudo e aprendizado.
+Adicione aqui a licença do projeto, se aplicável.
