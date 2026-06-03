@@ -100,6 +100,34 @@
         footer { margin-top: 50px; padding: 30px 20px; font-size: 0.8rem; color: #888; text-align: center; border-top: 1px solid #eee; }
         .social-links { margin-bottom: 15px; display: flex; justify-content: center; gap: 15px; }
         .social-btn { color: var(--primary); font-size: 1.2rem; text-decoration: none; }
+
+        /* Container do Anúncio Google - Otimizado para Desktop e Mobile */
+.ads-container {
+    background: #fff;
+    border-radius: 15px;
+    padding: 8px 12px 12px 12px; /* Reduzimos o topo e mantivemos as laterais/base */
+    margin: 10px auto 25px auto;
+    max-width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    border: 1px solid #eee;
+    text-align: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Força os elementos a ficarem um embaixo do outro */
+    align-items: center;
+}
+
+.ads-label {
+    font-size: 0.65rem;
+    color: #a0a0a0; /* Deixamos um cinza um pouco mais nítido */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    display: block;
+    width: 100%;
+    line-height: 1;
+}
     </style>
 </head>
     <!-- Google tag (gtag.js) -->
@@ -115,6 +143,14 @@
 
 <div class="container">
     <h2><i class="fas fa-calculator"></i> Contador de Aulas 2026</h2>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J6SDRMS3YN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-J6SDRMS3YN');
+</script>
     <h4>Informe a turma, o trimestre e as aulas semanais para gerar o relatório.</h4>
 
     <div class="form-group">
