@@ -18,6 +18,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- TAG DO SCRIPT PRINCIPAL DO ADSENSE (A que estava faltando!) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2296966328109573"
+     crossorigin="anonymous"></script>
+    
     <style>
         :root { --primary: #6B3B6F; --secondary: #FF8A65; --bg: #f4f7f6; --success: #2e7d32; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #333; margin: 0; padding: 15px; }
@@ -90,8 +94,9 @@
         .btn-copy.copied { background: var(--primary); }
         .coffee-icon { color: #6F4E37; font-size: 1.8em; margin-bottom: 3px; }
 
+        /* Customização de Impressão */
         @media print {
-            h2, h4, .form-group, .grid-aulas, button, label, .form-extra, .no-print, .banner-planos, .pix-section { display: none !important; }
+            h2, h4, .form-group, .grid-aulas, button, label, .form-extra, .no-print, .banner-planos, .pix-section, .ads-container { display: none !important; }
             .resultado-card { display: block !important; border: none; background: white; padding: 0; }
             table { font-size: 9pt; width: 100%; border: 1px solid #000; }
             th, td { border: 1px solid #000; padding: 4px; }
@@ -102,35 +107,36 @@
         .social-btn { color: var(--primary); font-size: 1.2rem; text-decoration: none; }
 
         /* Container do Anúncio Google - Otimizado para Desktop e Mobile */
-.ads-container {
-    background: #fff;
-    border-radius: 15px;
-    padding: 8px 12px 12px 12px; /* Reduzimos o topo e mantivemos as laterais/base */
-    margin: 10px auto 25px auto;
-    max-width: 100%;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-    border: 1px solid #eee;
-    text-align: center;
-    overflow: hidden;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column; /* Força os elementos a ficarem um embaixo do outro */
-    align-items: center;
-}
+        .ads-container {
+            background: #fff;
+            border-radius: 15px;
+            padding: 8px 12px 12px 12px;
+            margin: 10px auto 25px auto;
+            max-width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid #eee;
+            text-align: center;
+            overflow: hidden;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.ads-label {
-    font-size: 0.65rem;
-    color: #a0a0a0; /* Deixamos um cinza um pouco mais nítido */
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-    display: block;
-    width: 100%;
-    line-height: 1;
-}
+        .ads-label {
+            font-size: 0.65rem;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            display: block;
+            width: 100%;
+            line-height: 1;
+        }
     </style>
 </head>
-    <!-- Google tag (gtag.js) -->
+
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-687C8SMX96"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -141,19 +147,19 @@
 </script>
 <body>
 
-    <div class="ads-container">
-    <span class="ads-label">Publicidade</span>
-    <ins class="adsbygoogle"
-         style="display:inline-block; width:100%; max-height:280px;"
-         data-ad-client="ca-pub-2296966328109573"
-         data-ad-slot="1490507802"
-         data-ad-format="horizontal"
-         data-full-width-responsive="false"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-</div>
-    
+    <!-- Bloco de Anúncios Google AdSense Posicionado no Topo -->
+    <div class="ads-container wrapper-externo no-print">
+        <span class="ads-label">Publicidade</span>
+        <ins class="adsbygoogle"
+             style="display:inline-block; width:100%; max-height:280px;"
+             data-ad-client="ca-pub-2296966328109573"
+             data-ad-slot="1490507802"
+             data-ad-format="horizontal"
+             data-full-width-responsive="false"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
 
 <div class="container">
     <h2><i class="fas fa-calculator"></i> Contador de Aulas 2026</h2>
@@ -220,7 +226,9 @@
             <tbody id="listaCorpo"></tbody>
         </table>
     </div>
-</div> <div class="wrapper-externo">
+</div> 
+
+<div class="wrapper-externo">
     
     <a href="https://planos.professormg.com.br" target="_blank" class="banner-planos no-print">
         <div class="banner-content">
@@ -256,9 +264,9 @@
         <p>&copy; 2026 Professor MG | Techbox Academy</p>
         <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--secondary);"></i> para a educação mineira.</p>
         <p style="margin-top: 15px; font-size: 0.8em;">
-    Este é um projeto independente. 
-    <a href="legal.html" style="color: inherit; text-decoration: underline;">Leia o Aviso Legal e Termos de Uso.</a>
-</p>
+            Este é um projeto independente. 
+            <a href="legal.html" style="color: inherit; text-decoration: underline;">Leia o Aviso Legal e Termos de Uso.</a>
+        </p>
     </footer>
 </div>
 
