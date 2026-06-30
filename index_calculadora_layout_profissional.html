@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Aulas 2026 | ProfessorMG</title>
+    <meta name="description" content="Calcule o total de aulas previstas para o trimestre SEE/MG 2026. Gere relatórios em PDF com datas e dias da semana organizados.">
+    
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+    
+    <meta property="og:title" content="Calculadora de Aulas Previstas - SEE/MG 2026">
+    <meta property="og:description" content="Ferramenta gratuita para professores mineiros organizarem o Diário Digital e planos de curso.">
+    <meta property="og:image" content="assets/img/preview-calculadora.png">
+    <meta property="og:type" content="website">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- TAG DO SCRIPT PRINCIPAL DO ADSENSE -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2296966328109573"
+     crossorigin="anonymous"></script>
+    
+    <style>
+        :root {
+            --primary: #6B3B6F;
+            --primary-dark: #532d57;
+            --primary-soft: #f5edf6;
+            --secondary: #FF8A65;
+            --secondary-dark: #f36f48;
+            --success: #2e7d32;
+            --success-soft: #eef8f0;
+            --bg: #f6f2f7;
+            --card: #ffffff;
+            --text: #2f2f35;
+            --muted: #6f6872;
+            --line: #eee7ef;
+            --radius: 22px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(107,59,111,.16), transparent 34%),
+                radial-gradient(circle at top right, rgba(255,138,101,.16), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 24px 16px;
+            min-height: 100vh;
+        }
+
+        .page-shell {
+            width: 100%;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .wrapper-externo {
+            width: 100%;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .ads-container {
+            background: rgba(255,255,255,.92);
+            border-radius: 18px;
+            padding: 8px 12px 12px;
+            margin: 0 auto 22px;
+            width: 100%;
+            max-width: 920px;
+            box-shadow: 0 10px 26px rgba(65,38,68,.06);
+            border: 1px solid rgba(107,59,111,.10);
+            text-align: center;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .ads-label {
+            font-size: .65rem;
+            color: #a59aa7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            display: block;
+            width: 100%;
+            line-height: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 920px;
+            margin: 0 auto;
+            background: rgba(255,255,255,.96);
+            border: 1px solid rgba(107,59,111,.10);
+            border-radius: var(--radius);
+            box-shadow: 0 22px 60px rgba(65,38,68,.12);
+            overflow: hidden;
+        }
+
+        .hero-calculadora {
+            background: linear-gradient(135deg, var(--primary) 0%, #7f4b83 54%, var(--secondary) 100%);
+            color: white;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1.4fr .8fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .brand-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,.16);
+            border: 1px solid rgba(255,255,255,.24);
+            color: white;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: .78rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            color: white;
+            margin: 0;
+            font-size: clamp(1.8rem, 4vw, 2.55rem);
+            line-height: 1.06;
+            letter-spacing: -0.05em;
+        }
+
+        h4 {
+            margin: 12px 0 0;
+            font-weight: 500;
+            color: rgba(255,255,255,.88);
+            font-size: .98rem;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        .hero-card {
+            background: rgba(255,255,255,.14);
+            border: 1px solid rgba(255,255,255,.24);
+            border-radius: 20px;
+            padding: 18px;
+        }
+
+        .hero-card strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .hero-card span {
+            display: block;
+            color: rgba(255,255,255,.86);
+            font-size: .86rem;
+            line-height: 1.45;
+        }
+
+        .content-area {
+            padding: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            align-items: end;
+        }
+
+        .form-group { margin: 0; }
+        .form-group.full { grid-column: 1 / -1; }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            font-size: .86rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1.5px solid var(--line);
+            border-radius: 14px;
+            font-family: inherit;
+            box-sizing: border-box;
+            font-size: .95rem;
+            color: var(--text);
+            background: white;
+            transition: .2s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(107,59,111,.10);
+        }
+
+        .aulas-box {
+            grid-column: 1 / -1;
+            background: linear-gradient(180deg, #fff, #fff9f6);
+            border: 1px solid rgba(255,138,101,.24);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .aulas-box > label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .grid-aulas {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .day-input {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            padding: 10px;
+        }
+
+        .day-input label {
+            font-size: .73rem;
+            margin-bottom: 5px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .day-input input {
+            text-align: center;
+            padding: 10px 4px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .actions-row {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr .75fr;
+            gap: 12px;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 15px 18px;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s ease;
+            margin: 0;
+            font-size: 1rem;
+            font-family: inherit;
+            box-shadow: 0 12px 24px rgba(107,59,111,.22);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 28px rgba(107,59,111,.28);
+        }
+
+        .btn-limpar {
+            background: #6c6570;
+            box-shadow: 0 12px 24px rgba(76,70,80,.12);
+        }
+
+        .btn-imprimir {
+            background: #4b5563;
+            margin-top: 16px;
+        }
+
+        .btn-incluir {
+            background: var(--success) !important;
+            margin: 0 !important;
+            padding: 10px !important;
+            font-size: .85rem !important;
+            box-shadow: none !important;
+        }
+
+        .resultado-card {
+            margin-top: 28px;
+            padding: 22px;
+            border-radius: 20px;
+            background: linear-gradient(180deg, #f0fdf4, #ffffff);
+            border: 1.5px solid rgba(46,125,50,.28);
+            box-shadow: 0 12px 28px rgba(46,125,50,.09);
+        }
+
+        .total-aulas {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--success);
+            display: block;
+            text-align: center;
+            margin: 4px 0 6px;
+            letter-spacing: -0.06em;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 18px;
+            border-collapse: collapse;
+            font-size: .86rem;
+            overflow: hidden;
+            border-radius: 14px;
+        }
+
+        th {
+            background: var(--primary-soft);
+            color: var(--primary-dark);
+            padding: 10px;
+            text-align: left;
+            font-weight: 800;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .btn-remove {
+            color: #ef4444;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+            width: auto;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        .form-extra {
+            margin-top: 16px;
+            padding: 14px;
+            border: 1.5px dashed rgba(107,59,111,.34);
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .banner-ferramenta {
+            background: rgba(255,255,255,.96);
+            border: 1.5px solid rgba(107,59,111,.20);
+            border-radius: 20px;
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            text-decoration: none;
+            transition: .2s ease;
+            box-shadow: 0 12px 28px rgba(65,38,68,.07);
+            text-align: left;
+            margin-top: 22px;
+            color: inherit;
+        }
+
+        .banner-ferramenta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 34px rgba(65,38,68,.12);
+        }
+
+        .banner-planos {
+            border-color: rgba(46,125,50,.32);
+            background: linear-gradient(135deg, #fff, #f3fff5);
+        }
+
+        .banner-aulas {
+            border-color: rgba(255,138,101,.36);
+            background: linear-gradient(135deg, #fff, #fff4ef);
+        }
+
+        .banner-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .banner-icon {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            color: white;
+            font-size: 1.45rem;
+            background: var(--primary);
+            box-shadow: 0 10px 20px rgba(107,59,111,.20);
+        }
+
+        .banner-planos .banner-icon { background: var(--success); }
+        .banner-aulas .banner-icon { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+
+        .banner-info h5 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 1.08rem;
+            font-weight: 800;
+        }
+
+        .banner-info p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: .88rem;
+            line-height: 1.42;
+        }
+
+        .btn-banner {
+            background: var(--primary);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: .78rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .banner-planos .btn-banner { background: var(--success); }
+        .banner-aulas .btn-banner { background: var(--secondary); }
+
+        .pix-section {
+            background: rgba(255,255,255,.96);
+            padding: 28px 24px;
+            border-radius: 22px;
+            text-align: center;
+            margin-top: 22px;
+            border: 1.5px dashed rgba(107,59,111,.20);
+            box-shadow: 0 12px 28px rgba(65,38,68,.06);
+        }
+
+        .pix-section h3 {
+            font-size: 1.18rem;
+            color: var(--primary);
+            margin: 0 0 8px;
+            font-weight: 800;
+        }
+
+        .pix-section p {
+            font-size: .88rem;
+            color: var(--muted);
+            line-height: 1.48;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pix-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .pix-box {
+            background: #f8f6f9;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--primary);
+            font-size: .8em;
+            word-break: break-all;
+            max-width: 100%;
+        }
+
+        .btn-copy {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: .9rem;
+            transition: .2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: auto;
+            margin-bottom: 0;
+            box-shadow: 0 10px 18px rgba(46,125,50,.20);
+        }
+
+        .btn-copy.copied { background: var(--primary); }
+        .coffee-icon { color: #6F4E37; font-size: 1.8em; margin-bottom: 8px; }
+
+        footer {
+            margin-top: 36px;
+            padding: 30px 20px;
+            font-size: .82rem;
+            color: #8b8490;
+            text-align: center;
+            border-top: 1px solid rgba(107,59,111,.10);
+        }
+
+        .social-links {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .social-btn {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            color: var(--primary);
+            background: rgba(107,59,111,.08);
+            border-radius: 999px;
+            font-size: 1.08rem;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .social-btn:hover { transform: translateY(-2px); background: rgba(107,59,111,.14); }
+
+        @media (max-width: 760px) {
+            body { padding: 14px; }
+            .hero-calculadora { grid-template-columns: 1fr; padding: 24px 20px; }
+            .content-area { padding: 22px 18px; }
+            .form-grid { grid-template-columns: 1fr; gap: 16px; }
+            .actions-row { grid-template-columns: 1fr; }
+            .grid-aulas { grid-template-columns: repeat(3, 1fr); }
+            .banner-ferramenta { flex-direction: column; align-items: stretch; text-align: center; padding: 20px; }
+            .banner-content { flex-direction: column; text-align: center; }
+            .btn-banner { width: 100%; }
+            table { font-size: .78rem; }
+            th, td { padding: 8px 6px; }
+        }
+
+        @media (max-width: 420px) {
+            .grid-aulas { grid-template-columns: repeat(2, 1fr); }
+            h2 { font-size: 1.72rem; }
+        }
+
+        /* Customização de Impressão */
+        @media print {
+            .hero-calculadora,
+            .form-group,
+            .aulas-box,
+            .actions-row,
+            button,
+            label,
+            .form-extra,
+            .no-print,
+            .banner-ferramenta,
+            .pix-section,
+            .ads-container,
+            footer {
+                display: none !important;
+            }
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: 0; max-width: 100%; }
+            .content-area { padding: 0; }
+            .resultado-card { display: block !important; border: none; background: white; padding: 0; box-shadow: none; }
+            table { font-size: 9pt; width: 100%; border: 1px solid #000; }
+            th, td { border: 1px solid #000; padding: 4px; }
+        }
+    </style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-687C8SMX96"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-687C8SMX96');
+</script>
+<body>
+
+<div class="page-shell">
+    <!-- Bloco de Anúncios Google AdSense Posicionado no Topo -->
+    <div class="ads-container no-print">
+        <span class="ads-label">Publicidade</span>
+        <ins class="adsbygoogle"
+             style="display:inline-block; width:100%; max-height:280px;"
+             data-ad-client="ca-pub-2296966328109573"
+             data-ad-slot="1490507802"
+             data-ad-format="horizontal"
+             data-full-width-responsive="false"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="container">
+        <div class="hero-calculadora">
+            <div>
+                <div class="brand-kicker"><i class="fas fa-chalkboard-user"></i> ProfessorMG</div>
+                <h2><i class="fas fa-calculator"></i> Contador de Aulas 2026</h2>
+                <h4>Informe a turma, o trimestre e as aulas semanais para gerar o relatório de datas e dias da semana com mais agilidade.</h4>
+            </div>
+            <div class="hero-card no-print">
+                <strong><i class="fas fa-calendar-check"></i> Organização rápida</strong>
+                <span>Uma ferramenta simples para apoiar o planejamento, o diário digital e o fechamento do trimestre.</span>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nomeTurma">Turma</label>
+                    <input type="text" id="nomeTurma" placeholder="Ex: 9º Ano A">
+                </div>
+                
+                <div class="form-group">
+                    <label for="trimestre">Selecione o trimestre</label>
+                    <select id="trimestre">
+                        <option value="1">1º Trimestre (04/02 a 20/05)</option>
+                        <option value="2">2º Trimestre (21/05 a 09/09)</option>
+                        <option value="3">3º Trimestre (10/09 a 18/12)</option>
+                    </select>
+                </div>
+
+                <div class="aulas-box">
+                    <label><i class="fas fa-clock"></i> Aulas por dia da semana</label>
+                    <div class="grid-aulas">
+                        <div class="day-input"><label>Seg</label><input type="number" id="seg" value="0"></div>
+                        <div class="day-input"><label>Ter</label><input type="number" id="ter" value="0"></div>
+                        <div class="day-input"><label>Qua</label><input type="number" id="qua" value="0"></div>
+                        <div class="day-input"><label>Qui</label><input type="number" id="qui" value="0"></div>
+                        <div class="day-input"><label>Sex</label><input type="number" id="sex" value="0"></div>
+                    </div>
+                </div>
+
+                <div class="actions-row">
+                    <button onclick="gerarContagem()"><i class="fas fa-sync"></i> Calcular aulas</button>
+                    <button onclick="limparTudo()" class="btn-limpar"><i class="fas fa-eraser"></i> Limpar formulário</button>
+                </div>
+            </div>
+
+            <div id="resultado" class="resultado-card" style="display: none;">
+                <p style="text-align:center; margin:0; font-size: 0.9rem; color: var(--muted);">Total de aulas previstas</p>
+                <span id="totalDisplay" class="total-aulas">0</span>
+                
+                <button onclick="imprimirResultado()" class="btn-imprimir"><i class="fas fa-file-pdf"></i> Baixar Relatório (PDF)</button>
+
+                <div class="form-extra no-print">
+                    <p style="margin: 0 0 8px 0; font-weight: 800; font-size: 0.75rem; color: var(--primary);">INCLUIR DIA EXTRA</p>
+                    <div style="display: flex; gap: 8px; align-items: flex-end;">
+                        <div style="flex: 2;">
+                            <label style="font-size: 0.7rem; margin-bottom: 4px; color: #666;">Data:</label>
+                            <input type="date" id="extraData" style="font-size: 0.85rem; padding: 8px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="font-size: 0.7rem; margin-bottom: 4px; color: #666;">Qtd:</label>
+                            <input type="number" id="extraQtd" value="1" style="font-size: 0.85rem; padding: 8px;">
+                        </div>
+                        <button onclick="adicionarDiaExtra()" class="btn-incluir" style="flex: 1;">
+                            <i class="fas fa-plus"></i> Incluir
+                        </button>
+                    </div>
+                </div>
+
+                <table id="tabelaAulas">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Dia da Semana</th>
+                            <th>Aulas</th>
+                            <th class="no-print"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaCorpo"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper-externo">
+        <a href="https://planos.professormg.com.br" target="_blank" class="banner-ferramenta banner-planos no-print">
+            <div class="banner-content">
+                <div class="banner-icon"><i class="fas fa-book-open"></i></div>
+                <div class="banner-info">
+                    <h5>Planos de Curso SEE/MG 2026</h5>
+                    <p>Baixe os planejamentos e diretrizes do Ensino Fundamental e Médio organizados por trimestre.</p>
+                </div>
+            </div>
+            <div class="btn-banner">Baixar Planos</div>
+        </a>
+
+        <a href="https://aulas.professormg.com.br/" target="_blank" class="banner-ferramenta banner-aulas no-print">
+            <div class="banner-content">
+                <div class="banner-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                <div class="banner-info">
+                    <h5>Gerador de Planos de Aula</h5>
+                    <p>Transforme sua ideia em um plano de aula organizado, com habilidades, objetivos, metodologia e avaliação.</p>
+                </div>
+            </div>
+            <div class="btn-banner">Gerar Plano</div>
+        </a>
+
+        <div class="pix-section no-print">
+            <div class="coffee-icon"><i class="fas fa-coffee"></i></div>
+            <h3>A Calculadora te ajudou?</h3>
+            <p>Este projeto é independente e gratuito. Se a ferramenta poupou seu tempo contando dias e montando relatórios, apoie a manutenção do portal pagando um café:</p>
+            
+            <div class="pix-container">
+                <div class="pix-box" id="pixKey">00020126960014br.gov.bcb.pix01365a699962-0718-471d-b450-60d10653f7cc0234Doacao para o projeto ProfessorMG!5204000053039865802BR5925Stenio Carlos Ferreira Ga6010Campo Belo62290525STENIOCA00000641167715ASA6304622C</div>
+                <button class="btn-copy" id="copyBtn" onclick="copyPix()">
+                    <i class="fas fa-copy"></i> Copiar Chave PIX
+                </button>
+            </div>
+            <p style="font-size: 0.7em; margin-top: 12px; color: #999;">Contribuição voluntária para cobrir custos de infraestrutura e hospedagem.</p>
+        </div>
+
+        <footer>
+            <div class="social-links">
+                <a href="https://tiktok.com/@steniostein7" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i></a>
+                <a href="https://instagram.com/steniostein7" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+                <a href="mailto:steniostein7@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p>&copy; 2026 ProfessorMG | Techbox Academy</p>
+            <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--secondary);"></i> para a educação mineira.</p>
+            <p style="margin-top: 15px; font-size: 0.8em;">
+                Este é um projeto independente. 
+                <a href="legal.html" style="color: inherit; text-decoration: underline;">Leia o Aviso Legal e Termos de Uso.</a>
+            </p>
+        </footer>
+    </div>
+</div>
+
+<script>
+    function copyPix() {
+        const pixKey = document.getElementById('pixKey').innerText;
+        const btn = document.getElementById('copyBtn');
+        
+        navigator.clipboard.writeText(pixKey).then(() => {
+            btn.innerHTML = '<i class="fas fa-check"></i> Chave Copiada!';
+            btn.classList.add('copied');
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-copy"></i> Copiar Chave PIX';
+                btn.classList.remove('copied');
+            }, 2000);
+        }).catch(err => {
+            alert('Erro ao copiar. Por favor, selecione e copie o código manualmente.');
+        });
+    }
+</script>
+<script src="script.js"></script>
+</body>
+</html>
