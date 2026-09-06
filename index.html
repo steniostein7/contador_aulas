@@ -24,18 +24,19 @@
     
     <style>
         :root {
-            --primary: #6B3B6F;
-            --primary-dark: #532d57;
-            --primary-soft: #f5edf6;
-            --secondary: #FF8A65;
-            --secondary-dark: #f36f48;
-            --success: #2e7d32;
-            --success-soft: #eef8f0;
-            --bg: #f6f2f7;
+            --primary: #0F766E;
+            --primary-dark: #115E59;
+            --primary-soft: #E7F4F1;
+            --secondary: #F59E0B;
+            --secondary-dark: #D97706;
+            --success: #B45309;
+            --success-soft: #FFF7E6;
+            --bg: #F2F8F7;
             --card: #ffffff;
-            --text: #2f2f35;
-            --muted: #6f6872;
-            --line: #eee7ef;
+            --text: #243331;
+            --muted: #647571;
+            --line: #DCEAE7;
+            --accent: #F59E0B;
             --radius: 22px;
         }
 
@@ -46,8 +47,8 @@
         body {
             font-family: 'Poppins', sans-serif;
             background:
-                radial-gradient(circle at top left, rgba(107,59,111,.16), transparent 34%),
-                radial-gradient(circle at top right, rgba(255,138,101,.16), transparent 30%),
+                radial-gradient(circle at top left, rgba(15,118,110,.16), transparent 34%),
+                radial-gradient(circle at top right, rgba(245,158,11,.16), transparent 30%),
                 var(--bg);
             color: var(--text);
             margin: 0;
@@ -74,8 +75,8 @@
             margin: 0 auto 22px;
             width: 100%;
             max-width: 920px;
-            box-shadow: 0 10px 26px rgba(65,38,68,.06);
-            border: 1px solid rgba(107,59,111,.10);
+            box-shadow: 0 10px 26px rgba(11,78,74,.06);
+            border: 1px solid rgba(15,118,110,.10);
             text-align: center;
             overflow: hidden;
             display: flex;
@@ -99,14 +100,14 @@
             max-width: 920px;
             margin: 0 auto;
             background: rgba(255,255,255,.96);
-            border: 1px solid rgba(107,59,111,.10);
+            border: 1px solid rgba(15,118,110,.10);
             border-radius: var(--radius);
-            box-shadow: 0 22px 60px rgba(65,38,68,.12);
+            box-shadow: 0 22px 60px rgba(11,78,74,.12);
             overflow: hidden;
         }
 
         .hero-calculadora {
-            background: linear-gradient(135deg, var(--primary) 0%, #7f4b83 54%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, #14867C 54%, var(--secondary) 100%);
             color: white;
             padding: 30px;
             display: grid;
@@ -204,13 +205,13 @@
         select:focus, input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(107,59,111,.10);
+            box-shadow: 0 0 0 4px rgba(15,118,110,.10);
         }
 
         .aulas-box {
             grid-column: 1 / -1;
-            background: linear-gradient(180deg, #fff, #fff9f6);
-            border: 1px solid rgba(255,138,101,.24);
+            background: linear-gradient(180deg, #fff, #FFF7E6);
+            border: 1px solid rgba(245,158,11,.24);
             border-radius: 18px;
             padding: 18px;
         }
@@ -272,12 +273,12 @@
             margin: 0;
             font-size: 1rem;
             font-family: inherit;
-            box-shadow: 0 12px 24px rgba(107,59,111,.22);
+            box-shadow: 0 12px 24px rgba(15,118,110,.22);
         }
 
         button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 16px 28px rgba(107,59,111,.28);
+            box-shadow: 0 16px 28px rgba(15,118,110,.28);
         }
 
         .btn-limpar {
@@ -302,9 +303,9 @@
             margin-top: 28px;
             padding: 22px;
             border-radius: 20px;
-            background: linear-gradient(180deg, #f0fdf4, #ffffff);
-            border: 1.5px solid rgba(46,125,50,.28);
-            box-shadow: 0 12px 28px rgba(46,125,50,.09);
+            background: linear-gradient(180deg, #F7FCFB, #ffffff);
+            border: 1.5px solid rgba(180,83,9,.28);
+            box-shadow: 0 12px 28px rgba(180,83,9,.09);
         }
 
         .total-aulas {
@@ -354,14 +355,67 @@
         .form-extra {
             margin-top: 16px;
             padding: 14px;
-            border: 1.5px dashed rgba(107,59,111,.34);
+            border: 1.5px dashed rgba(15,118,110,.34);
             border-radius: 16px;
             background: #fff;
         }
 
+        .promos-section {
+            margin-top: 28px;
+            padding: 26px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(15,118,110,.10), rgba(245,158,11,.12));
+            border: 1px solid rgba(15,118,110,.14);
+            box-shadow: 0 16px 38px rgba(11,78,74,.08);
+        }
+
+        .promos-heading {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .promos-kicker {
+            display: inline-flex;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: var(--primary);
+            color: white;
+            font-size: .7rem;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .promos-heading h3 {
+            margin: 10px 0 6px;
+            color: var(--primary-dark);
+            font-size: clamp(1.25rem, 3vw, 1.65rem);
+            letter-spacing: -.03em;
+        }
+
+        .promos-heading p {
+            margin: 0 auto;
+            max-width: 680px;
+            color: var(--muted);
+            font-size: .88rem;
+            line-height: 1.5;
+        }
+
+        .promo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 7px;
+            color: var(--secondary-dark);
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
         .banner-ferramenta {
             background: rgba(255,255,255,.96);
-            border: 1.5px solid rgba(107,59,111,.20);
+            border: 1.5px solid rgba(15,118,110,.20);
             border-radius: 20px;
             padding: 22px;
             display: flex;
@@ -370,7 +424,7 @@
             gap: 18px;
             text-decoration: none;
             transition: .2s ease;
-            box-shadow: 0 12px 28px rgba(65,38,68,.07);
+            box-shadow: 0 12px 28px rgba(11,78,74,.07);
             text-align: left;
             margin-top: 22px;
             color: inherit;
@@ -378,17 +432,17 @@
 
         .banner-ferramenta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 18px 34px rgba(65,38,68,.12);
+            box-shadow: 0 18px 34px rgba(11,78,74,.12);
         }
 
         .banner-planos {
-            border-color: rgba(46,125,50,.32);
-            background: linear-gradient(135deg, #fff, #f3fff5);
+            border-color: rgba(180,83,9,.32);
+            background: linear-gradient(135deg, #fff, #EAF7F4);
         }
 
         .banner-aulas {
-            border-color: rgba(255,138,101,.36);
-            background: linear-gradient(135deg, #fff, #fff4ef);
+            border-color: rgba(245,158,11,.36);
+            background: linear-gradient(135deg, #fff, #FFF7E6);
         }
 
         .banner-content {
@@ -407,7 +461,7 @@
             color: white;
             font-size: 1.45rem;
             background: var(--primary);
-            box-shadow: 0 10px 20px rgba(107,59,111,.20);
+            box-shadow: 0 10px 20px rgba(15,118,110,.20);
         }
 
         .banner-planos .banner-icon { background: var(--success); }
@@ -447,8 +501,8 @@
             border-radius: 22px;
             text-align: center;
             margin-top: 22px;
-            border: 1.5px dashed rgba(107,59,111,.20);
-            box-shadow: 0 12px 28px rgba(65,38,68,.06);
+            border: 1.5px dashed rgba(15,118,110,.20);
+            box-shadow: 0 12px 28px rgba(11,78,74,.06);
         }
 
         .pix-section h3 {
@@ -476,7 +530,7 @@
         }
 
         .pix-box {
-            background: #f8f6f9;
+            background: #F7FBFA;
             padding: 12px 15px;
             border-radius: 12px;
             border: 1px solid var(--line);
@@ -503,7 +557,7 @@
             gap: 8px;
             width: auto;
             margin-bottom: 0;
-            box-shadow: 0 10px 18px rgba(46,125,50,.20);
+            box-shadow: 0 10px 18px rgba(180,83,9,.20);
         }
 
         .btn-copy.copied { background: var(--primary); }
@@ -515,30 +569,63 @@
             font-size: .82rem;
             color: #8b8490;
             text-align: center;
-            border-top: 1px solid rgba(107,59,111,.10);
+            border-top: 1px solid rgba(15,118,110,.10);
+        }
+
+        .footer-social-groups {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            max-width: 760px;
+            margin: 0 auto 22px;
+            text-align: left;
+        }
+
+        .social-group {
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255,255,255,.72);
+        }
+
+        .social-group-title {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+            font-size: .76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .04em;
         }
 
         .social-links {
-            margin-bottom: 15px;
             display: flex;
-            justify-content: center;
-            gap: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .social-btn {
-            width: 42px;
-            height: 42px;
-            display: grid;
-            place-items: center;
-            color: var(--primary);
-            background: rgba(107,59,111,.08);
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 38px;
+            padding: 9px 12px;
+            color: var(--primary-dark);
+            background: var(--primary-soft);
+            border: 1px solid rgba(15,118,110,.14);
             border-radius: 999px;
-            font-size: 1.08rem;
+            font-size: .76rem;
+            font-weight: 700;
             text-decoration: none;
             transition: .2s ease;
         }
 
-        .social-btn:hover { transform: translateY(-2px); background: rgba(107,59,111,.14); }
+        .social-btn:hover {
+            transform: translateY(-2px);
+            color: white;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
 
         @media (max-width: 760px) {
             body { padding: 14px; }
@@ -547,9 +634,13 @@
             .form-grid { grid-template-columns: 1fr; gap: 16px; }
             .actions-row { grid-template-columns: 1fr; }
             .grid-aulas { grid-template-columns: repeat(3, 1fr); }
+            .promos-section { padding: 20px 14px; }
             .banner-ferramenta { flex-direction: column; align-items: stretch; text-align: center; padding: 20px; }
             .banner-content { flex-direction: column; text-align: center; }
             .btn-banner { width: 100%; }
+            .footer-social-groups { grid-template-columns: 1fr; }
+            .social-group { text-align: center; }
+            .social-links { justify-content: center; }
             table { font-size: .78rem; }
             th, td { padding: 8px 6px; }
         }
@@ -696,27 +787,37 @@
     </div>
 
     <div class="wrapper-externo">
-        <a href="https://planos.professormg.com.br" target="_blank" class="banner-ferramenta banner-planos no-print">
-            <div class="banner-content">
-                <div class="banner-icon"><i class="fas fa-book-open"></i></div>
-                <div class="banner-info">
-                    <h5>Planos de Curso SEE/MG 2026</h5>
-                    <p>Baixe os planejamentos e diretrizes do Ensino Fundamental e Médio organizados por trimestre.</p>
-                </div>
+        <section class="promos-section no-print" aria-labelledby="promos-title">
+            <div class="promos-heading">
+                <span class="promos-kicker"><i class="fas fa-lightbulb"></i>&nbsp; Recursos ProfessorMG</span>
+                <h3 id="promos-title">Mais facilidade para planejar suas aulas</h3>
+                <p>Acesse materiais prontos e ferramentas gratuitas para organizar o trimestre com mais rapidez.</p>
             </div>
-            <div class="btn-banner">Baixar Planos</div>
-        </a>
 
-        <a href="https://aulas.professormg.com.br/" target="_blank" class="banner-ferramenta banner-aulas no-print">
-            <div class="banner-content">
-                <div class="banner-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-                <div class="banner-info">
-                    <h5>Gerador de Planos de Aula</h5>
-                    <p>Transforme sua ideia em um plano de aula organizado, com habilidades, objetivos, metodologia e avaliação.</p>
+            <a href="https://planos.professormg.com.br" target="_blank" rel="noopener" class="banner-ferramenta banner-planos">
+                <div class="banner-content">
+                    <div class="banner-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="banner-info">
+                        <span class="promo-badge"><i class="fas fa-star"></i> Novo · 3º trimestre</span>
+                        <h5>Planos de Curso do 3º Trimestre disponíveis</h5>
+                        <p>Acesse os planos para Anos Iniciais, Anos Finais e Ensino Médio, organizados por ano e disciplina.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="btn-banner">Gerar Plano</div>
-        </a>
+                <div class="btn-banner">Ver 3º Trimestre</div>
+            </a>
+
+            <a href="https://aulas.professormg.com.br/" target="_blank" rel="noopener" class="banner-ferramenta banner-aulas">
+                <div class="banner-content">
+                    <div class="banner-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                    <div class="banner-info">
+                        <span class="promo-badge"><i class="fas fa-bolt"></i> Planejamento inteligente</span>
+                        <h5>Crie seu plano de aula com o ProfessorMG</h5>
+                        <p>Gere planos de aula e atividades com habilidades, objetivos, metodologia e avaliação.</p>
+                    </div>
+                </div>
+                <div class="btn-banner">Criar Plano de Aula</div>
+            </a>
+        </section>
 
         <div class="pix-section no-print">
             <div class="coffee-icon"><i class="fas fa-coffee"></i></div>
@@ -733,20 +834,30 @@
         </div>
 
         <footer>
-        <div class="footer-social">
-            <a href="https://tiktok.com/@steniostein7" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-            <a href="https://instagram.com/steniostein7" target="_blank" aria-label="Instagram Pessoal"><i class="fab fa-instagram"></i></a>
-            <a href="https://instagram.com/oficialprofessormg" target="_blank" aria-label="Instagram ProfessorMG"><i class="fab fa-instagram"></i></a>
-            <a href="https://wa.me/5535935052147" target="_blank" aria-label="WhatsApp Suporte"><i class="fab fa-whatsapp"></i></a>
-            <a href="mailto:steniostein7@gmail.com" aria-label="E-mail"><i class="fas fa-envelope"></i></a>
-        </div>
-        <p>&copy; 2026 ProfessorMG | Techbox Academy</p>
-        <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--accent);"></i> para a educação mineira.</p>
-        <p style="margin-top: 15px; font-size: 0.82em;">
-            Este é um projeto independente.
-            <a href="legal.html" style="color: inherit; text-decoration: underline;">Leia o Aviso Legal e Termos de Uso.</a>
-        </p>
-    </footer>
+            <div class="footer-social-groups">
+                <div class="social-group">
+                    <span class="social-group-title">ProfessorMG — canais oficiais</span>
+                    <div class="social-links">
+                        <a class="social-btn" href="https://instagram.com/oficialprofessormg" target="_blank" rel="noopener" aria-label="Instagram oficial do ProfessorMG"><i class="fab fa-instagram"></i> Instagram</a>
+                        <a class="social-btn" href="https://wa.me/5535935052147" target="_blank" rel="noopener" aria-label="WhatsApp do ProfessorMG"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a class="social-btn" href="mailto:steniostein7@gmail.com" aria-label="E-mail do ProfessorMG"><i class="fas fa-envelope"></i> E-mail</a>
+                    </div>
+                </div>
+                <div class="social-group">
+                    <span class="social-group-title">Perfis pessoais</span>
+                    <div class="social-links">
+                        <a class="social-btn" href="https://tiktok.com/@steniostein7" target="_blank" rel="noopener" aria-label="TikTok pessoal"><i class="fab fa-tiktok"></i> TikTok</a>
+                        <a class="social-btn" href="https://instagram.com/steniostein7" target="_blank" rel="noopener" aria-label="Instagram pessoal"><i class="fab fa-instagram"></i> Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <p>&copy; 2026 ProfessorMG | Techbox Academy</p>
+            <p>Desenvolvido com <i class="fas fa-heart" style="color: var(--accent);"></i> para a educação mineira.</p>
+            <p style="margin-top: 15px; font-size: 0.82em;">
+                Este é um projeto independente.
+                <a href="legal.html" style="color: inherit; text-decoration: underline;">Leia o Aviso Legal e Termos de Uso.</a>
+            </p>
+        </footer>
 
     </div>
 </div>
